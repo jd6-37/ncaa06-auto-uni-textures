@@ -68,7 +68,7 @@ if not dumps_path or not os.path.exists(dumps_path):
     dumps_path = user_input_path
 
 # Output the value of dumps_path
-print(f"\n[•] The DUMPS FOLDER is defined and confirmed to exist at: {dumps_path}")
+print(f"\n[•]   The DUMPS FOLDER is defined and confirmed to exist at:    #")
 print(f"\n#   {dumps_path}  #")
 print(f"\n#---------------------------------------------------------------------#")
 print()  # Add a line break 
