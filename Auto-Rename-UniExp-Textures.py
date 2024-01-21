@@ -154,10 +154,16 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
         )
 
     # Using a few different methods for comparing files to find the matching dumped texture
-    def find_similar_images(reference_image_path, dumps_path, file_params=None):
-        # Construct the correct path for the reference image
-        reference_image_path = os.path.join(script_dir, reference_folder, source_image)
+    def find_similar_images(reference_image_path, dumps_path, file_params=None, context=None):
         
+        
+                            
+        # Construct the correct path for the reference image
+        if context:
+          reference_image_path = os.path.join(script_dir, reference_folder, 'alts', source_image)
+        else:
+          reference_image_path = os.path.join(script_dir, reference_folder, source_image)
+
         # Extract the directory containing the reference image
         reference_directory = os.path.dirname(reference_image_path)
 
@@ -174,6 +180,11 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
             if filename.endswith(".png"):
                 file_path = os.path.join(dumps_path, filename)
 
+                # print()
+                # print()
+                # print(f"Comparing {reference_image_path} and {file_path}") 
+                # print(f"file is a PNG file.")
+
                 compared_file_info = os.stat(file_path)
                 compared_file_size = compared_file_info.st_size
 
@@ -182,9 +193,15 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                     compared_image = Image.open(file_path)
                     compared_image_dimensions = compared_image.size
 
+                    if context and "alternate" in context:
+                          print(f"Running in alternate context.")
+                    
+
                     if reference_image_dimensions == compared_image_dimensions:
                         compared_hash_phash = imagehash.phash(compared_image)
                         compared_hash_dhash = imagehash.dhash(compared_image)
+
+                        
 
                         # Check if per-item parameters exist and use default values from config.txt if not
                         hash_tolerance_default = config_content.get('hash_tolerance_default', 8)
@@ -206,6 +223,11 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
 
                           ssim = compare_ssim(reference_cv_image, compared_cv_image, win_size=5, multichannel=True,
                                               channel_axis=2)
+                        
+                          
+                          # print(f"Comparing {reference_image_path} and {file_path}")
+                          # print(f"SSIM: {ssim}")
+
 
                           if ssim >= ssim_threshold:
                               # Calculate hash_tolerance_for_pass and print the result
@@ -479,18 +501,33 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
     for file, file_data in reference_files.items():
         source_image = file_data["source"]
         params = file_data if 'hash_tolerance' in file_data and 'ssim_threshold' in file_data else None
-        similar_images = find_similar_images(os.path.join(script_dir, reference_folder, source_image), dumps_path, params)
+        # print(f"Value for first property passed to find_similar_images: {os.path.join(script_dir, reference_folder, source_image)}")
+        original_similar_images = find_similar_images(os.path.join(script_dir, reference_folder, source_image), dumps_path, params)
 
         if file in ["num07shadow.png", "num89shadow.png"]:
-            if similar_images:
-                process_texture(file, file_data, similar_images)
+            if original_similar_images:
+                process_texture(file, file_data, original_similar_images)
             else:
-                no_texture(file, file_data, similar_images)
+                no_texture(file, file_data, original_similar_images)
         else:
-            if similar_images and len(similar_images) > 0:
-                process_texture(file, file_data, [similar_images[0]])
+            if original_similar_images and len(original_similar_images) > 0:
+                process_texture(file, file_data, [original_similar_images[0]])
             else:
-                no_texture(file, file_data, similar_images)
+                # Check alternates only when there are no similar images in the original check
+                alternate_source_path = os.path.join(script_dir, reference_folder, 'alts', source_image)
+                if os.path.exists(alternate_source_path):
+                    print()  # Add a line break 
+                    print()  # Add a line break 
+                    print(f"No match for {source_image}. Trying again using the reference image in the alts folder")
+                    alternate_similar_images = find_similar_images(alternate_source_path, dumps_path, params, context="alts")
+                    print(f"at: {alternate_source_path}...")
+               
+                    if alternate_similar_images:
+                        process_texture(file, file_data, [alternate_similar_images[0]])
+                    else:
+                        no_texture(file, file_data, alternate_similar_images)
+                else:
+                    no_texture(file, file_data, original_similar_images)
 
 
 
@@ -515,11 +552,11 @@ print("#--------------------------------------------------------------#")
 print("#                                                              #")
 if required_textures_counter < 30:
   print("#                 !!!! DONE WITH ERRORS !!!!                   #")
+  print(f"#         Number of textures found and renamed: {required_textures_counter + optional_textures_counter}             #")
 else: 
   print("#                         SUCCESS!                             #")
-# Print the total count of successful operations
-print(f"#         Number of textures found and renamed: {required_textures_counter + optional_textures_counter}             #")
-print(f"#                   Required: {required_textures_counter} of 30                         #")
+  print(f"#         Number of textures found and renamed: {required_textures_counter + optional_textures_counter}             #")
+print(f"#                   Required: {required_textures_counter} of 30 ✔                       #")
 print(f"#                    Optional: {optional_textures_counter} of 4                          #")
 if required_textures_counter < 30:
   print("#                                                              #")
