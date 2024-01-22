@@ -6,10 +6,10 @@
 
 #### Define the full path to the dumps folder.
 #### Be sure to wrap it in double quotes and preced it with an "r" as shown in the example.
-dumps_path = "/Users/j/Library/Application Support/AetherSX2/textures/SLUS-21214/dumps"
+dumps_path = r"/Users/j/Library/Application Support/AetherSX2/textures/SLUS-21214/dumps"
 
 #### The uniform name in the format of in the format of teamname-slotname (Eg. appstate-alt03, appstate-home, etc.)
-uniform_slot_name = "test-testlight"
+uniform_slot_name = "southern-alt18"
 
 #### Dark (home) uniform or light (away) uniform? (dark/light)
 uniform_type = "light"
@@ -53,8 +53,8 @@ ssim_threshold_03_TC_QB_Wrist = 0.8
 # hash_tolerance_11_TC_Half_Sleeve = 
 # ssim_threshold_11_TC_Half_Sleeve = 
 
-hash_tolerance_13_Sock = 31
-ssim_threshold_13_Sock = 0.1
+hash_tolerance_13_Sock = 8
+ssim_threshold_13_Sock = 0.8
 
 # hash_tolerance_14_Bk_TC_Pad = 
 # ssim_threshold_14_Bk_TC_Pad = 

@@ -5,7 +5,20 @@ import cv2
 import os
 import sys
 import csv
+import platform
 from skimage.metrics import structural_similarity as compare_ssim
+from colorama import init, Fore, Style
+init()  # initialize colorama for ANSI color codes in Windows
+
+# Function to get a formatted checkmark or fallback
+def get_checkmark():
+    checkmark = f"{Fore.GREEN}✔{Style.RESET_ALL}"
+    if platform.system() == 'Windows':
+        checkmark = f"{Fore.GREEN}+{Style.RESET_ALL}"
+    return checkmark
+
+# Example usage with a green checkmark or fallback to a green plus sign
+checkmark = get_checkmark()
 
 # Use sys._MEIPASS if running as a PyInstaller executable, otherwise use the script's directory
 if getattr(sys, 'frozen', False):
@@ -47,10 +60,16 @@ print("############################################################")
 print("#                                                          #")
 print("#   NCAA NEXT Uniform Expansion Texture Renaming Utility   #")
 print("#                                                          #")
-print("#                  Version: Beta 0.1                       #")
+print("#                  Version: Beta 0.2                       #")
 print("#                                                          #")
 print("############################################################")
 
+print()  # Add a line break 
+print()  # Add a line break 
+print(f"=== CONFIGURATION SETTINGS ===") 
+print()  # Add a line break 
+print("You can define these in the config.txt file.") 
+print()  # Add a line break 
 
 # Check if dumps_path is not defined or the folder does not exist
 if not dumps_path or not os.path.exists(dumps_path):
@@ -68,9 +87,9 @@ if not dumps_path or not os.path.exists(dumps_path):
     dumps_path = user_input_path
 
 # Output the value of dumps_path
-print(f"\n[•] The DUMPS FOLDER is defined and confirmed to exist at: {dumps_path}")
-print(f"\n#   {dumps_path}  #")
-print(f"\n#---------------------------------------------------------------------#")
+print(f"\n[•]  DUMPS FOLDER is defined and confirmed to exist at:")
+print(f"\n#     └-----→  {dumps_path}")
+print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
 print()  # Add a line break 
 
 
@@ -80,20 +99,20 @@ if not uniform_slot_name:
     print()  # Add a line break 
     uniform_slot_name = input("[!] The UNIFORM SLOT NAME is not defined in config.txt. Enter the name in the format of teamname-slotname (Eg. appstate-alt03, appstate-home, etc.): ")
 # Output the value of uniform_slot_name
-print(f"\n[•] The UNIFORM SLOT NAME is defined as (if this is incorrect, edit it in config.txt):")
-print(f"\n#               {uniform_slot_name}                                   #")
-print(f"\n#---------------------------------------------------------------------#")
+print(f"\n[•]  UNIFORM SLOT NAME is defined as: ")
+print(f"\n#     └-----→  {uniform_slot_name} ")
+print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
 print()  # Add a line break 
 
 # Check if uniform_type is not defined or the folder does not exist
 if not uniform_type:
     # Prompt the user to enter a path
     print()  # Add a line break 
-    uniform_type = input("[!] The UNIFORM TYPE is not defined in config.txt. Are you making a dark (home) uniform or light (away) uniform? (dark/light): ")
+    uniform_type = input("[!] The UNIFORM TYPE is not defined in config.txt. Are you making a dark uniform or light uniform? (dark/light): ")
 # Output the value of uniform_type
-print(f"\n[•] The UNIFORM TYPE is (if this is incorrect, edit it in config.txt): ")
-print(f"\n#                {uniform_type}                                                #")
-print(f"\n#---------------------------------------------------------------------#")
+print(f"\n[•] UNIFORM TYPE is:  ")
+print(f"\n#     └-----→  {uniform_type} ")
+print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
 # Add a condition to check the uniform type and set the appropriate path
 if uniform_type.lower() == 'dark':
     reference_folder = "reference-dark"
@@ -103,12 +122,12 @@ else:
     print("Invalid input. Assuming dark uniform.")
     reference_folder = "reference-dark"
 # Output the selected default textures folder
-print(f"The reference folder for the {uniform_type} uniform is set to: {reference_folder}. Feel free to use your actual dumped textures in here if the image matching utility is having trouble finding a match.")
+print(f" └→ The reference folder for the {uniform_type} uniform is set to: {reference_folder}. Feel free to put your actual dumped textures in here (or its alts subfolder) if the image matching utility is having trouble finding a match.")
 print()  # Add a line break 
 
 
 # Check if pridesticker_transparent is defined in the config
-if pridesticker_transparent is not None:
+if pridesticker_transparent is not None and pridesticker_transparent != "":
     transparent_pride_stickers = pridesticker_transparent
 else:
     # Function to ask if the pride stickers should be transparent
@@ -121,14 +140,37 @@ else:
     transparent_pride_stickers = prompt_transparent_pride_stickers()
 
 # Output the value of pridesticker_transparent
-print(f"\n[•] PRIDE STICKERS TRANSPARENTED? (If this is incorrect, edit it in config.txt):")
-print(f"\n#                {transparent_pride_stickers}                                                  #")
-print(f"\n#---------------------------------------------------------------------#")
+print(f"\n[•] PRIDE STICKERS TRANSPARENTED?:")
+print(f"\n#     └-----→  {transparent_pride_stickers}")
+print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
 
 
 # Ask the user to press Enter to continue
 print()  # Add a line break 
-input("Are you ready to proceed? Press enter to continue.")
+print()  # Add a line break 
+print("=== PRE-RUN CHECKLIST ===")
+print()  # Add a line break 
+print("Before we begin, your dumps folder is expected to contain all 30-34 dumped textures.")
+print("for your chosen uniform type (light/dark). To dump all of these, you must have: ")
+print()  # Add a line break 
+print(" • Reset your rosters to that of the development ISO (so all gear gets used)")
+print(" • Set the game weather to cold (so the Face Protector is worn)")
+print(" • Deleted everything in your dumps folder during the game loading screen (after the uniform")
+print("   selection screen and prior to the coin toss)")
+print(" • Dumped during the coin toss (so the Face Protector top piece can dump)")
+print(" • Run at least one play from scrimmage (not just the kickoff)")
+print(" • Either let the the pre-game onfield presentation run its course OR have zoomed in close")
+print("   during an instant replay (so the facemask near textures can dump)")
+print()  # Add a line break 
+print("If you didn't do all of the things above when dumping the textures, your dumps folder")
+print("probably does not contain all of the required textures, and you should exit now (by")
+print("closing this window), delete the contents of the dumps folder, and do the dump again.")
+
+
+# Ask the user to press Enter to continue
+print()  # Add a line break 
+print("Are you ready to proceed? Press enter to continue.")
+input()  # Add a line break 
 
 print()  # Add a line break 
 print("#----------------------------------------------------------#")
@@ -153,15 +195,29 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
             abs(reference_hash_dhash - compared_hash_dhash)
         )
 
+    # function to get all files in a directory
+    def get_all_png_files_in_directory(directory):
+        return [os.path.join(directory, f) for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f)) and f.lower().endswith(".png")]
+
     # Using a few different methods for comparing files to find the matching dumped texture
-    def find_similar_images(reference_image_path, dumps_path, file_params=None):
-        # Construct the correct path for the reference image
-        reference_image_path = os.path.join(script_dir, reference_folder, source_image)
-        
+    def find_similar_images(reference_image_path, dumps_path, file_params=None, context=None):
+                            
+        # # Construct the correct path for the reference image
+        # if context:
+        #   reference_image_path = os.path.join(script_dir, reference_folder, 'alts', source_image)
+        # else:
+        #   reference_image_path = os.path.join(script_dir, reference_folder, source_image)
+
         # Extract the directory containing the reference image
         reference_directory = os.path.dirname(reference_image_path)
 
-        reference_image = Image.open(reference_image_path)
+        try:
+            reference_image = Image.open(reference_image_path)
+        except FileNotFoundError:
+            print()
+            print()
+            print(f"{Fore.RED}!!!!!!!! ERROR:{Style.RESET_ALL}  Missing reference file at: {reference_image_path}")
+            return []  # or handle the error as needed
         reference_hash_phash = imagehash.phash(reference_image)
         reference_hash_dhash = imagehash.dhash(reference_image)
         reference_image_dimensions = reference_image.size
@@ -173,6 +229,11 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
         for filename in os.listdir(dumps_path):
             if filename.endswith(".png"):
                 file_path = os.path.join(dumps_path, filename)
+
+                # print()
+                # print()
+                # print(f"Comparing {reference_image_path} and {file_path}") 
+                # print(f"file is a PNG file.")
 
                 compared_file_info = os.stat(file_path)
                 compared_file_size = compared_file_info.st_size
@@ -206,6 +267,11 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
 
                           ssim = compare_ssim(reference_cv_image, compared_cv_image, win_size=5, multichannel=True,
                                               channel_axis=2)
+                        
+                          
+                          # print(f"Comparing {reference_image_path} and {file_path}")
+                          # print(f"SSIM: {ssim}")
+
 
                           if ssim >= ssim_threshold:
                               # Calculate hash_tolerance_for_pass and print the result
@@ -358,7 +424,7 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                         new_file_name = f"{found_filename_base}.png"
                         shutil.copy(os.path.join(default_textures_folder, "transparent.png"), os.path.join(renamed_folder, "transparents", renamed_subfolder, new_file_name))
                         print("NUMBER SHADOW TRANSPARENTED")
-                        print("\u2713 SUCCESS. Transparent renamed and filename added to the CSV file.")
+                        print(f"{checkmark} SUCCESS. Transparent renamed and filename added to the CSV file.")
                         required_textures_counter += 1
                         # Write to the CSV file
                         csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
@@ -376,13 +442,13 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                   print("PRIDE STICKER TRANSPARENTED")
                   # Write to the CSV file
                   csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
-                  print("\u2713 SUCCESS. Transparent texture renamed and filename added to the CSV file.")
+                  print(f"{checkmark} SUCCESS. Transparent texture renamed and filename added to the CSV file.")
                   required_textures_counter += 1
                 else: 
                   shutil.copy(os.path.join(source_folder, source_image), os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
                   csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
-                  print("\u2713 SUCCESS. Texture renamed and filename added to the CSV file.")
+                  print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   required_textures_counter += 1
             
             # If no helmet or sleeve/shoulder numbers are provided, use the main jersey numbers
@@ -394,14 +460,14 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                   shutil.copy(helmet_file, os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
                   csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
-                  print("\u2713 SUCCESS. Texture renamed and filename added to the CSV file.")
+                  print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   optional_textures_counter += 1
               else:
                   new_file_name = f"{found_filename}.png"
                   shutil.copy(os.path.join(source_folder, "num07.png"), os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
                   csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
-                  print("\u2713 SUCCESS. Texture renamed and filename added to the CSV file.")
+                  print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   optional_textures_counter += 1
 
 
@@ -413,14 +479,14 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                     shutil.copy(helmet_file, os.path.join(renamed_folder, new_file_name))
                     # Write to the CSV file
                     csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
-                    print("\u2713 SUCCESS. Texture renamed and filename added to the CSV file.")
+                    print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                     optional_textures_counter += 1
                 else:
                     new_file_name = f"{found_filename}.png"
                     shutil.copy(os.path.join(source_folder, "num89.png"), os.path.join(renamed_folder, new_file_name))
                     # Write to the CSV file
                     csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
-                    print("\u2713 SUCCESS. Texture renamed and filename added to the CSV file.")
+                    print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                     optional_textures_counter += 1
 
             
@@ -432,7 +498,7 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                   shutil.copy(os.path.join(default_textures_folder, source_image), os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
                   csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
-                  print("\u2713 SUCCESS. Texture renamed and filename added to the CSV file.")
+                  print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   required_textures_counter += 1
               else:
                   # Copy from source_folder for other files
@@ -440,7 +506,7 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                   shutil.copy(os.path.join(source_folder, source_image), os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
                   csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
-                  print("\u2713 SUCCESS. Texture renamed and filename added to the CSV file.")
+                  print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   required_textures_counter += 1
 
 
@@ -456,9 +522,15 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
         print()  # Add a line break 
         if file in ["17-Shoe_w_White_Tape.png"]:
           print(f"###########################################################")
-          print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
           print(f"[•] ==== NO similar images found for {file}. Try raising the hash_tolerance to 2 or more and/or lowering the ssim_threshold for this item in config.txt to broaden the search. Alternatively, you can replace the reference texture with the actual dumped texture for a definite match. ====")
-          print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
+          print(f"###########################################################")
+        if file in ["13-Sock.png"]:
+          print(f"###########################################################")
+          print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
+          print(f"[•] ==== NO similar images found for {file}. The light uniform's sock is a particularly troublesome texture. The only solution is go find the actual dumped texture in your dumps folder, and then add it to the ALTS-SOCK folder inside the REFERENCE-LIGHT directory (or, if a dark uniform, in the REFERENCE-DARK directory). You don't need to rename it. Also, please ping @JD637 on Discord with this sock texture attached so he can add it to the tool for others.  ====")
+          print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
           print(f"###########################################################")
         elif file in ["num07helmet.png", "num89helmet.png"]:
           print(f"[•] ==== No similar images found for {file}. This is okay if helmet numbers are disabled in this uniform slot. ====")
@@ -466,9 +538,9 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
           print(f"[•] ==== No similar images found for {file}. This is okay if sleeve/shoulder numbers are disabled in this uniform slot. ====")
         else:
           print(f"###########################################################")
-          print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
           print(f"[•] ==== NO similar images found for {file}. Try raising the hash_tolerance and/or lowering the ssim_threshold for this item in config.txt to broaden the search. Alternatively, you can replace the reference texture with the actual dumped texture for a definite match. ====")
-          print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
           print(f"###########################################################")
 
     
@@ -479,19 +551,61 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
     for file, file_data in reference_files.items():
         source_image = file_data["source"]
         params = file_data if 'hash_tolerance' in file_data and 'ssim_threshold' in file_data else None
-        similar_images = find_similar_images(os.path.join(script_dir, reference_folder, source_image), dumps_path, params)
+        # print(f"Value for first property passed to find_similar_images: {os.path.join(script_dir, reference_folder, source_image)}")
+        original_similar_images = find_similar_images(os.path.join(script_dir, reference_folder, source_image), dumps_path, params)
 
         if file in ["num07shadow.png", "num89shadow.png"]:
-            if similar_images:
-                process_texture(file, file_data, similar_images)
+            if original_similar_images:
+                process_texture(file, file_data, original_similar_images)
             else:
-                no_texture(file, file_data, similar_images)
+                no_texture(file, file_data, original_similar_images)
         else:
-            if similar_images and len(similar_images) > 0:
-                process_texture(file, file_data, [similar_images[0]])
+            if original_similar_images and len(original_similar_images) > 0:
+                process_texture(file, file_data, [original_similar_images[0]])
             else:
-                no_texture(file, file_data, similar_images)
+                # Check alternates only when there are no similar images in the original check
+                if file in ["13-Sock.png"]:
+                    alts_folder = "alts-sock"
+                    alternate_source_directory = os.path.join(script_dir, reference_folder, alts_folder)
 
+                    # Check if the alternate source directory exists
+                    if os.path.exists(alternate_source_directory):
+                        print()  # Add a line break
+                        print()  # Add a line break
+                        print(f"↓↓↓↓↓↓↓ No match for {source_image}. Trying again using the reference images in the {alts_folder} folder")
+
+                        # Get all PNG files in the alternate source directory
+                        alternate_source_files = get_all_png_files_in_directory(alternate_source_directory)
+
+                        for alternate_source_path in alternate_source_files:
+                            print(f"at: {alternate_source_path}...")
+                            alternate_similar_images = find_similar_images(alternate_source_path, dumps_path, params, context=f"{alts_folder}")
+
+                            if alternate_similar_images:
+                                process_texture(file, file_data, [alternate_similar_images[0]])
+                                break  # Break out of the loop if a match is found
+
+                        else:
+                            no_texture(file, file_data, alternate_similar_images)
+                    else:
+                        no_texture(file, file_data, original_similar_images)
+                else:
+                    # Continue with the old way for other files
+                    alts_folder = "alts"
+                    alternate_source_path = os.path.join(script_dir, reference_folder, alts_folder, source_image)
+                    if os.path.exists(alternate_source_path):
+                        print()  # Add a line break 
+                        print()  # Add a line break 
+                        print(f"↓↓↓↓↓↓↓ No match for {source_image}. Trying again using the reference image in the alts folder")
+                        alternate_similar_images = find_similar_images(alternate_source_path, dumps_path, params, context=f"{alts_folder}")
+                        print(f"at: {alternate_source_path}...")
+                  
+                        if alternate_similar_images:
+                            process_texture(file, file_data, [alternate_similar_images[0]])
+                        else:
+                            no_texture(file, file_data, alternate_similar_images)
+                    else:
+                        no_texture(file, file_data, original_similar_images)
 
 
 
@@ -509,22 +623,22 @@ renamed_folder = os.path.join(script_dir, "RENAMED", renamed_subfolder)
 # Move the CSV file to the 'renamed' folder
 shutil.move(csv_file_path, os.path.join(renamed_folder, csv_filename))
 shutil.copy(config_file_path, os.path.join(renamed_folder, 'config.txt'))
-           
 print()  # Add a line break 
 print("#--------------------------------------------------------------#")
 print("#                                                              #")
 if required_textures_counter < 30:
-  print("#                 !!!! DONE WITH ERRORS !!!!                   #")
+  print(f"#                 {Fore.RED}!!!! DONE WITH ERRORS !!!!{Style.RESET_ALL}                   #")
+  print(f"#         Number of textures found and renamed: {required_textures_counter + optional_textures_counter}             #")
+  print(f"#                   Required: {Fore.RED}{required_textures_counter}{Style.RESET_ALL} of 30                         #")
 else: 
-  print("#                         SUCCESS!                             #")
-# Print the total count of successful operations
-print(f"#         Number of textures found and renamed: {required_textures_counter + optional_textures_counter}             #")
-print(f"#                   Required: {required_textures_counter} of 30                         #")
+  print(f"#                         {Fore.GREEN}SUCCESS!{Style.RESET_ALL}                             #")
+  print(f"#         Number of textures found and renamed: {required_textures_counter + optional_textures_counter}             #")
+  print(f"#                   Required: {Fore.GREEN}{required_textures_counter}{Style.RESET_ALL} of 30                         #")
 print(f"#                    Optional: {optional_textures_counter} of 4                          #")
 if required_textures_counter < 30:
   print("#                                                              #")
-  print("#                !!!!  SOMETHING WENT WRONG. !!!               #")
-  print(f"#     !!!!  {30 - required_textures_counter} of the required textures are missing.  !!!       #")
+  print(f"#                {Fore.RED}!!!!  SOMETHING WENT WRONG. !!!{Style.RESET_ALL}               #")
+  print(f"#     {Fore.RED}!!!!  {30 - required_textures_counter} of the required textures are missing.  !!!{Style.RESET_ALL}       #")
 print("#                                                              #")
 print("#       READ ALL OF THE OUTPUT ABOVE TO CHECK FOR ISSUES.      #")
 print("#      Your renamed textures are in a subfolder of RENAMED.    #")
