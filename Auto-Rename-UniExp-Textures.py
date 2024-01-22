@@ -722,13 +722,117 @@ elif csv_provided == True:
 
 
     # Output the value of pridesticker_transparent
-    print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL} PRIDE STICKERS TRANSPARENTED?:  ==================================#")
-    print(f"\n|     └-----→  {Fore.GREEN}{transparent_pride_stickers_csv}{Style.RESET_ALL}")
-    print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
+    print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL} PRIDE STICKERS TRANSPARENTED?:  {Fore.GREEN}{transparent_pride_stickers_csv}{Style.RESET_ALL}")
 
     print()
     print()
-    # Loop through each CSV file
+
+    # Define the transparent file and check if it exists
+    transparent_source_path = os.path.join(default_textures_folder, 'transparent.png')
+    
+    # CHECK FOR MISSING DEFAULT TEXTURES
+    default_textures_to_check = [
+        'transparent.png',
+        'wrist_Half_Sleeve_Bk.png',
+        'wrist_Half_Sleeve_Wt.png',
+        'wrist_QB_Wrist_Bk.png',
+        'wrist_QB_Wrist_Wt.png'
+    ]
+
+    # Check if all default textures exist
+    missing_default_textures = [file for file in default_textures_to_check if not os.path.exists(os.path.join(default_textures_folder, file))]
+
+    if not missing_default_textures:
+        print(f"All necessary default textures exist. {Fore.GREEN}{checkmark}{Style.RESET_ALL}")
+    else:
+        print(f"{Fore.RED}!!!!!!!! ERROR:{Style.RESET_ALL} The following files are missing from the default-textures folder:")
+        for missing_file in missing_default_textures:
+            print(f"- {missing_file}")
+        print()
+        print("Cannot proceed. Press enter to exit.")
+        print()
+        input()
+        sys.exit(1)
+
+    # CHECK FOR MISSING REQUIRED TEXTURES
+    required_textures_to_check = [
+        'wrist_Half_Sleeve_Bk.png',
+        'wrist_Half_Sleeve_Wt.png',
+        'wrist_QB_Wrist_Bk.png',
+        'wrist_QB_Wrist_Wt.png',
+        '01-TC_Wrist.png',
+        '03-TC_QB_Wrist.png',
+        '04-TC_Thin_Band.png',
+        '06-TC_Face_Protector.png',
+        '07-TC_Med_Band--34_sleeve_top.png',
+        '10-Wt_TC_Pad.png',
+        '11-TC_Half_Sleeve.png',
+        '13-Sock.png',
+        '14-Bk_TC_Pad.png',
+        '15-TC_Long_Sleeve.png',
+        '16-Shoe.png',
+        '17-Shoe_w_White_Tape.png',
+        '18-Facemask_Far.png',
+        '20-Facemask_Near.png',
+        '22-Chinstrap.png',
+        '23-Shoe_w_Black_Tape.png',
+        '24-Shoe_w_TC_Tape.png',
+        '25-TC_Face_Protector_Top.png',
+        'helmet.png',
+        'jersey.png',
+        'num07.png',
+        'num89.png',
+        'pants.png'
+    ]
+
+    # Check if all required textures exist
+    missing_required_textures = [file for file in required_textures_to_check if not (source_folder, file)]
+
+    if not missing_required_textures:
+        print(f"All required textures exist in the YOUR_TEXTURES_HERE folder. {Fore.GREEN}{checkmark}{Style.RESET_ALL}")
+    else:
+        print(f"{Fore.RED}!!!!!!!! ERROR:{Style.RESET_ALL} The following required textures are missing from the YOUR_TEXTURES_HERE folder:")
+        for missing_file in missing_required_textures:
+            print(f"- {missing_file}")
+        print("Cannot proceed. Press enter to exit.")
+        input()
+        sys.exit(1)
+
+
+    # Initialize a set to store unique texture names from the CSV file
+    csv_texture_names = set()
+
+    # Open the CSV file and check for all required textures
+    for csv_file in csv_files:
+        csv_path = os.path.join(csv_folder, csv_file)
+
+        # Open the CSV file for reading
+        with open(csv_path, 'r') as csvfile:
+            csv_reader = csv.reader(csvfile)
+
+            # Skip the header row
+            next(csv_reader, None)
+
+            # Extract all unique texture names from the TEXTURES column
+            csv_texture_names.update(row[3] for row in csv_reader)
+
+    # Check if all required textures exist in the CSV
+    missing_required_textures = [texture for texture in required_textures_to_check if texture not in csv_texture_names]
+
+    if not missing_required_textures:
+        print(f"All required textures exist in the CSV. {Fore.GREEN}{checkmark}{Style.RESET_ALL}")
+        print()
+    else:
+        print(f"{Fore.RED}!!!!!!!! ERROR:{Style.RESET_ALL} The following required textures are missing from the CSV:")
+        for missing_texture in missing_required_textures:
+            print(f"- {missing_texture}")
+        print("Cannot proceed. Press enter to exit.")
+        input()
+        sys.exit(1)
+
+
+
+    # Open the CSV file for the file renaming process
     for csv_file in csv_files:
         csv_path = os.path.join(csv_folder, csv_file)
 
@@ -738,6 +842,7 @@ elif csv_provided == True:
             
             # Skip the header row
             next(csv_reader, None)
+            
             
             # Iterate over the rows in the CSV file
             for row in csv_reader:
@@ -752,36 +857,73 @@ elif csv_provided == True:
                 # Create "transparents" subfolder inside subfolder_path
                 transparents_subfolder = os.path.join(subfolder_path, "transparents")
                 os.makedirs(transparents_subfolder, exist_ok=True)
-                # Check for additional conditions
+                            
+                # Number shadows
                 if texture == 'num07shadow.png':
                     num07_shadow_folder = os.path.join(transparents_subfolder, 'num07-shadow')
                     os.makedirs(num07_shadow_folder, exist_ok=True)
-                    transparent_source_path = os.path.join(default_textures_folder, 'transparent.png')
-                    transparent_destination_path = os.path.join(num07_shadow_folder, 'transparent.png')
+                    transparent_destination_path = os.path.join(num07_shadow_folder, filename)
                     shutil.copy2(transparent_source_path, transparent_destination_path)
+                    print(f"{checkmark} num07shadow (transparented) copied and renamed.")
                 elif texture == 'num89shadow.png':
                     num89_shadow_folder = os.path.join(transparents_subfolder, 'num89-shadow')
                     os.makedirs(num89_shadow_folder, exist_ok=True)
-                    transparent_source_path = os.path.join(default_textures_folder, 'transparent.png')
-                    transparent_destination_path = os.path.join(num89_shadow_folder, 'transparent.png')
+                    transparent_destination_path = os.path.join(num89_shadow_folder, filename)
                     shutil.copy2(transparent_source_path, transparent_destination_path)
-
-                # Check if the texture is one of the special cases
-                special_cases = ['wrist_QB_Wrist_Bk.png', 'wrist_QB_Wrist_Wt.png', 'wrist_Half_Sleeve_Wt.png', 'wrist_Half_Sleeve_Bk.png', 'num07shadow.png', 'num89shadow.png']
-                if texture in special_cases:
-                    
-                else:
-                    # Construct source path for regular cases
-                    source_path = os.path.join(source_folder, texture)
+                    print(f"{checkmark} num89shadow (transparented) copied and renamed.")
+                elif texture == 'pridesticker.png':
+                    if transparent_pride_stickers_csv:
+                        pridesticker_folder = os.path.join(transparents_subfolder, 'pride-sticker')
+                        os.makedirs(pridesticker_folder, exist_ok=True)
+                        pridesticker_source_path = os.path.join(default_textures_folder, 'transparent.png')
+                        pridesticker_output = " (transparented)"
+                    else:
+                        pridesticker_source_path = os.path.join(source_folder, texture)
+                        pridesticker_folder = subfolder_path
+                        pridesticker_output = ""
+                    transparent_destination_path = os.path.join(pridesticker_folder, filename)
+                    shutil.copy2(pridesticker_source_path, transparent_destination_path)
+                    print(f"{checkmark} pridesticker{pridesticker_output} copied and renamed.")
+                else:     
+                    # Default textures
+                    default_textures_csv = ['wrist_QB_Wrist_Bk.png', 'wrist_QB_Wrist_Wt.png', 'wrist_Half_Sleeve_Wt.png', 'wrist_Half_Sleeve_Bk.png', 'num07shadow.png', 'num89shadow.png']
+                    if texture in default_textures_csv:
+                        # Construct source and destination paths for default black and white textures 
+                        source_path = os.path.join(default_textures_folder, texture)
+                    else:
+                        # Construct source path for regular cases
+                        source_path = os.path.join(source_folder, texture)
 
                     # Construct destination path
                     destination_path = os.path.join(subfolder_path, filename)
 
                     # Copy the file to the destination with the specified filename
-                    shutil.copy2(source_path, destination_path)
+                    if os.path.exists(source_path):
+                        shutil.copy2(source_path, destination_path)
+                        print(f"{checkmark} {texture} copied and renamed.")
+                    else:
+                        print(f"{Fore.RED}-{Style.RESET_ALL} {texture} in CSV but no source in YOUR_TEXTURES folder")
 
-    print("Files copied and renamed according to the CSV data.")
+    for csv_file in csv_files:
+        csv_source_path = os.path.join(csv_folder, csv_file)
+        csv_destination_path = os.path.join(subfolder_path, csv_file)  # Adjust the filename accordingly
 
+        # Copy the CSV file to the destination with the specified filename
+        shutil.copy2(csv_source_path, csv_destination_path)
+        print()
+        print(f"{checkmark} CSV file copied to subfolder.")
+
+    print()
+    print()  # Add a line break 
+    print("#--------------------------------------------------------------#")
+    print(f"#                         {Fore.GREEN}SUCCESS!{Style.RESET_ALL}                             #")
+    print("#             All files were copied and renamed                #")
+    print("#                  according to the CSV data.                  #")
+    print("#                                                              #")
+    print("#       READ ALL OF THE OUTPUT ABOVE TO CHECK FOR ISSUES.      #")
+    print("#      Your renamed textures are in a subfolder of RENAMED.    #")
+    print("#      The source CSV file was also copied to that folder.     #")
+    print("#  Be sure to leave the CSV file in the folder and submit it   #")
     print("#                                                              #")
     print("#        ---  PRESS ENTER OR CLOSE THIS WINDOW  ---            #")
     print("#                                                              #")
