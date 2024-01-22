@@ -5,11 +5,6 @@
 RENAMED/
 dist/
 build/
-default-textures/
-YOUR_TEXTURES_HERE/
-YOUR_TEXTURES_HERE*/
-reference-dark/
-reference-light/
 *.zip
 *.spec
 output.csv
