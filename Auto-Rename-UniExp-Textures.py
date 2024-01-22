@@ -178,11 +178,24 @@ print("#                                                          #")
 print("#                     RESULTS:                             #")
 print("#                                                          #")
 
+
+# Extract the first segment of uniform_slot_name
+if '-' in uniform_slot_name:
+    teamname = uniform_slot_name.split('-')[0]
+else:
+    teamname = uniform_slot_name
+
+# Extract the second segment of uniform_slot_name
+if '-' in uniform_slot_name:
+    slotname = uniform_slot_name.split('-')[1]
+else:
+    slotname = uniform_slot_name
+
 # Open a CSV file for writing
 csv_filename = f"{uniform_slot_name}.csv"
 csv_file_path = os.path.join(script_dir, csv_filename)
 with open(csv_file_path, mode='w', newline='') as csvfile:
-    fieldnames = ['file', 'new_file_name']
+    fieldnames = ['TEAM NAME', 'SLOT', 'TYPE', 'TEXTURE', 'FILENAME']
     csv_writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
     # Write the header
@@ -427,7 +440,7 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                         print(f"{checkmark} SUCCESS. Transparent renamed and filename added to the CSV file.")
                         required_textures_counter += 1
                         # Write to the CSV file
-                        csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                        csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
 
 
             # If answered yes to transparent pride sticker, copy the transparent image instead of a source image
@@ -441,13 +454,13 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                   shutil.copy(os.path.join(default_textures_folder, "transparent.png"), os.path.join(renamed_folder, "transparents", "pride-sticker", new_file_name))
                   print("PRIDE STICKER TRANSPARENTED")
                   # Write to the CSV file
-                  csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                  csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
                   print(f"{checkmark} SUCCESS. Transparent texture renamed and filename added to the CSV file.")
                   required_textures_counter += 1
                 else: 
                   shutil.copy(os.path.join(source_folder, source_image), os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
-                  csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                  csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
                   print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   required_textures_counter += 1
             
@@ -459,14 +472,14 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                   new_file_name = f"{found_filename}.png"
                   shutil.copy(helmet_file, os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
-                  csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                  csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
                   print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   optional_textures_counter += 1
               else:
                   new_file_name = f"{found_filename}.png"
                   shutil.copy(os.path.join(source_folder, "num07.png"), os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
-                  csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                  csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
                   print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   optional_textures_counter += 1
 
@@ -478,14 +491,14 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                     new_file_name = f"{found_filename}.png"
                     shutil.copy(helmet_file, os.path.join(renamed_folder, new_file_name))
                     # Write to the CSV file
-                    csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                    csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
                     print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                     optional_textures_counter += 1
                 else:
                     new_file_name = f"{found_filename}.png"
                     shutil.copy(os.path.join(source_folder, "num89.png"), os.path.join(renamed_folder, new_file_name))
                     # Write to the CSV file
-                    csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                    csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
                     print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                     optional_textures_counter += 1
 
@@ -497,7 +510,7 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                   new_file_name = f"{found_filename}.png"
                   shutil.copy(os.path.join(default_textures_folder, source_image), os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
-                  csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                  csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
                   print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   required_textures_counter += 1
               else:
@@ -505,7 +518,7 @@ with open(csv_file_path, mode='w', newline='') as csvfile:
                   new_file_name = f"{found_filename}.png"
                   shutil.copy(os.path.join(source_folder, source_image), os.path.join(renamed_folder, new_file_name))
                   # Write to the CSV file
-                  csv_writer.writerow({'file': file, 'new_file_name': new_file_name})
+                  csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
                   print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                   required_textures_counter += 1
 
