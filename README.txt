@@ -1,44 +1,76 @@
 
-=== NCAA NEXT UNIFORM EXPANSION TEXTURE RENAMING UTILITY ===
+#===== NCAA NEXT UNIFORM EXPANSION TEXTURE RENAMING UTILITY =====
 
-This is the second generation of the batch renaming companion utility for the NCAA NEXT Uniform Expansion project. It will now automatically detect the proper texture names by looking at your dumps folder. You no longer need to track and provide the textures names!
+This is the second generation of the batch renaming companion utility 
+for the NCAA NEXT Uniform Expansion project. It can still rename textures 
+using texture names provided in a CSV file, but also...
+
+It can now automatically find the proper filename to use by looking at your dumps folder!
+You no longer need to hunt in the dumps folder and manually track textures names!
 
 
-INSTRUCTIONS:
+##----------- PREPARING YOUR TEXTURES (For both renaming methods): ----------
 
-STEP 1. Define the path to your dumps folder in the config.txt file.
+STEP 1. Copy all of the exported PNG files from the TC Gear template into 
+the "YOUR_TEXTURES_HERE" folder.
 
-STEP 2. Copy all of the exported PNG files from the TC Gear template into the "YOUR_TEXTURES_HERE" folder.
+NOTE: Don't feel like you need to use the chinstrap from the TC Gear template. 
+It's probably best to use a plain white one anyway unless you see differently 
+in reference photos. The default white one is in the 'default-textures' folder. 
+If you want to use that, copy it into the 'YOUR_TEXTURES_HERE' folder and replace the 
+chinstrap from the TC Gear export. Make sure it is named 'img22.png' or '22-Chinstrap.png'.
 
-NOTE: Don't feel like you need to use the chinstrap from the TC Gear template. It's probably best to use a plain white one anyway, unless you see differently in reference photos. The default white one is in the 'default-textures' folder. If you want to use that, copy it into the 'put_exported_textures_in_here' folder and replace the chinstrap from the TC Gear export. Make sure it is named 'img22.png' or '22-Chinstrap.png'.
-
-STEP 3. Put your other uniform pieces in the same folder. They must be named exactly as follows. The number shadows are automatically made transparent. No need to add those.
+STEP 3. Put your other uniform pieces in the same folder. They must be named 
+exactly as follows. The number shadows are automatically made transparent. No need to add those.
 
 helmet.png
 pants.png
 jersey.png
-pridesticker.png*
 num07.png
 num89.png
-num07helmet.png*
-num89helmet.png*
+pridesticker.png*
+num07helmet.png†
+num89helmet.png†
 num07ss.png† 
 num89ss.png† 
 
-* if no replacement texture is provided, a transparent will be created automatically.
+* optional, these can be transparented by the tool
 
-† if no replacement texture is provided, the script will use the main jersey numbers for the sleeve/shoulders (this is usually what you want)
+† optional, and if no source texture is provided, the script can use the main jersey numbers for 
+  the helmet and/or sleeve/shoulders (this is usually what you want)
 
-STEP 4. Double-click the Auto-Rename-UniExp-Textures.exe file. It will compare the files in your dumps folder to the reference folder, detect which texture is which, and use those file names to rename your textures and put them into the RENAMED folder.
 
-STEP 5. That's it! Rename the 'renamed' folder to the name of the uniform slot (Eg. home, away, alt01, alt02, etc.) and move it to your emulator textures/SLUS-21214/replacements folder to test the uniform.
+##----------- INSTRUCTIONS (For Auto Dumps Image Matching): ----------
 
-STEP 6. Test the textures in your emulator to ensure all of the replacement textures are named properly and working as intended. PLEASE DO NOT SKIP THIS STEP!
+Before you start: It's important that you dumped your textures in a very specific way. 
+Follow these instructions closely:
+https://docs.google.com/document/d/1RI2ceiXVRgVu8H-POCee2n3O08iQxa_Q/
 
-STEP 7. If everything looks good and is working as expected, upload the home/away/alt01/etc folder to Google Drive. Be sure to put it in the correct team folder.
-https://drive.google.com/drive/folders/1jKRN70C3EIExMDVUeHQ2x_yei1iKjwbm
+STEP 1. Open config.txt and define the path to your dumps folder. 
+You can also define the other variables here if you want. 
+For the uniform slot name, use the format teamname-slotname (note the dash) where slotname 
+is home/away/alt01/etc. The part after the dash is what is used to name the output folder.
 
-STEP 8. Post in the #files-to-merge channel the name of the team and uniform slot(s) you uploaded.
+STEP 2. Double-click the Auto-Rename-UniExp-Textures.exe file and follow the prompts.
 
-THANK YOU!
+STEP 3. That's it! Move the subfolder in RENAMED to your emulator textures folder 
+Eg. PCSX2/texture/SLUS-21214/replacements folder to test the uniform.
 
+STEP 4. Test the textures in-game to ensure everything is named properly and working as intended. 
+
+DONE!
+
+
+##----------- INSTRUCTIONS (For CSV Input): ----------
+
+STEP 1: Put one CSV file in the csv-override folder. Make sure it is in the same format 
+as csv-override-example.csv.
+
+STEP 2: Double-click the Auto-Rename-UniExp-Textures.exe file and follow the prompts.
+
+STEP 3. That's it! Move the subfolder in RENAMED to your emulator textures folder 
+Eg. PCSX2/texture/SLUS-21214/replacements folder to test the uniform.
+
+STEP 4. Test the textures in-game to ensure everything is named properly and working as intended. 
+
+DONE!

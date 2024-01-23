@@ -62,7 +62,7 @@ print("#####################################################################")
 print("#                                                                   #")
 print("#       NCAA NEXT Uniform Expansion Texture Renaming Utility        #")
 print("#                                                                   #")
-print("#                      Version: Beta 0.2                            #")
+print("#                     Version: Beta 0.3.1                           #")
 print("#                                                                   #")
 print("#####################################################################")
 
@@ -82,7 +82,9 @@ elif len(csv_files) == 1:
     csv_provided = True
     print()  # Add a line break 
     print()  # Add a line break 
-    print(f"{Fore.GREEN}CSV override provided.{Style.RESET_ALL} Skipping image matching and renaming using the filenames in the CSV.")
+    print(f"{Fore.GREEN}CSV override provided.{Style.RESET_ALL} Skipping image matching. Renaming using the filenames in the CSV.")
+    print()  # Add a line break 
+    print(f"{Fore.BLUE}IMPORTANT:{Style.RESET_ALL} Be sure to format your CSV exactly like the included example (csv-override-example.csv). The TEXTURE column must be the third column, and its contents must be as shown in the example – the names of the source textures with '.png'. The fourth column, 'FILENAME', must contain the names to which the textures will be renamed. ")
 else:
     csv_provided = False
     print()  # Add a line break 
@@ -756,10 +758,6 @@ elif csv_provided == True:
 
     # CHECK FOR MISSING REQUIRED TEXTURES
     required_textures_to_check = [
-        'wrist_Half_Sleeve_Bk.png',
-        'wrist_Half_Sleeve_Wt.png',
-        'wrist_QB_Wrist_Bk.png',
-        'wrist_QB_Wrist_Wt.png',
         '01-TC_Wrist.png',
         '03-TC_QB_Wrist.png',
         '04-TC_Thin_Band.png',
@@ -786,7 +784,7 @@ elif csv_provided == True:
     ]
 
     # Check if all required textures exist
-    missing_required_textures = [file for file in required_textures_to_check if not (source_folder, file)]
+    missing_required_textures = [file for file in required_textures_to_check if not os.path.exists(os.path.join(source_folder, file))]
 
     if not missing_required_textures:
         print(f"All required textures exist in the YOUR_TEXTURES_HERE folder. {Fore.GREEN}{checkmark}{Style.RESET_ALL}")
@@ -843,7 +841,20 @@ elif csv_provided == True:
             # Skip the header row
             next(csv_reader, None)
             
-            
+            # Function to handle the sleeve/shoulder and helmet numbers logic
+            def copy_numbers(source_folder, subfolder_path, filename, texture, main_texture):
+                source_path = os.path.join(source_folder, texture)
+                destination_path = os.path.join(subfolder_path, filename)
+
+                if not os.path.exists(source_path):
+                    source_path = os.path.join(source_folder, main_texture)
+                    output = f" (using main {main_texture})"
+                else:
+                    output = ".png"
+
+                shutil.copy2(source_path, destination_path)
+                print(f"{checkmark} {texture}{output} copied and renamed.")
+
             # Iterate over the rows in the CSV file
             for row in csv_reader:
                 team_name, slot, _, texture, filename = row  # Assuming 'TYPE' field is not needed
@@ -871,6 +882,21 @@ elif csv_provided == True:
                     transparent_destination_path = os.path.join(num89_shadow_folder, filename)
                     shutil.copy2(transparent_source_path, transparent_destination_path)
                     print(f"{checkmark} num89shadow (transparented) copied and renamed.")
+                
+                # Num07ss
+                elif texture == 'num07ss.png':
+                    copy_numbers(source_folder, subfolder_path, filename, 'num07ss.png', 'num07.png')
+                # Num89ss
+                elif texture == 'num89ss.png':
+                    copy_numbers(source_folder, subfolder_path, filename, 'num89ss.png', 'num89.png')
+                # Num07helmet
+                elif texture == 'num07helmet.png':
+                    copy_numbers(source_folder, subfolder_path, filename, 'num07helmet.png', 'num07.png')
+                # Num89helmet
+                elif texture == 'num89helmet.png':
+                    copy_numbers(source_folder, subfolder_path, filename, 'num89helmet.png', 'num89.png')
+
+                # Pride Sticker
                 elif texture == 'pridesticker.png':
                     if transparent_pride_stickers_csv:
                         pridesticker_folder = os.path.join(transparents_subfolder, 'pride-sticker')
@@ -880,10 +906,12 @@ elif csv_provided == True:
                     else:
                         pridesticker_source_path = os.path.join(source_folder, texture)
                         pridesticker_folder = subfolder_path
-                        pridesticker_output = ""
+                        pridesticker_output = ".png"
                     transparent_destination_path = os.path.join(pridesticker_folder, filename)
                     shutil.copy2(pridesticker_source_path, transparent_destination_path)
                     print(f"{checkmark} pridesticker{pridesticker_output} copied and renamed.")
+                
+                # All others
                 else:     
                     # Default textures
                     default_textures_csv = ['wrist_QB_Wrist_Bk.png', 'wrist_QB_Wrist_Wt.png', 'wrist_Half_Sleeve_Wt.png', 'wrist_Half_Sleeve_Bk.png', 'num07shadow.png', 'num89shadow.png']
