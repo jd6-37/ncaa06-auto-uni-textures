@@ -41,8 +41,15 @@ uniform_slot_name = config_content.get('uniform_slot_name', None)
 # Extract the uniform_type from the config
 uniform_type = config_content.get('uniform_type', None)
 
-# Extract the pridesticker_transparent from the config
-pridesticker_transparent = config_content.get('pridesticker_transparent', None)
+# Extract the photoshop_pref from the config
+photoshop_pref = config_content.get('photoshop_pref', None)
+
+# Extract the pridesticker_pref from the config
+pridesticker_pref = config_content.get('pridesticker_pref', None)
+# Extract the helmetnumbers_pref from the config
+helmetnumbers_pref = config_content.get('helmetnumbers_pref', None)
+# Extract the ssnumbers_pref from the config
+ssnumbers_pref = config_content.get('ssnumbers_pref', None)
 
 # Define the 'put_textures_here' source folder
 source_folder = os.path.join(script_dir, "YOUR_TEXTURES_HERE")
@@ -62,7 +69,7 @@ print("#####################################################################")
 print("#                                                                   #")
 print("#       NCAA NEXT Uniform Expansion Texture Renaming Utility        #")
 print("#                                                                   #")
-print("#                     Version: Beta 0.3.1                           #")
+print("#                     Version: 0.4.0-beta                           #")
 print("#                                                                   #")
 print("#####################################################################")
 
@@ -91,103 +98,219 @@ else:
     print()  # Add a line break 
     print("No CSV Override provided. Proceeding with automatic image matching...")
 
+# Configuration settings stage...
+
+print()  # Add a line break 
+print()  # Add a line break 
+print(f"{Fore.BLUE}+++++++++++++++++++++++ CONFIGURATION SETTINGS +++++++++++++++++++++++{Style.RESET_ALL}") 
+print()  # Add a line break 
+print("You can define these in the config.txt file.") 
+print()  # Add a line break 
+
+# Config settings for only the image matching method
+if len(csv_files) != 1:
+  # Check if dumps_path is not defined or the folder does not exist
+  if not dumps_path or not os.path.exists(dumps_path):
+      # Prompt the user to enter a path
+      print()  # Add a line break 
+      print(f"{Fore.YELLOW}[!] The path to the DUMPS FOLDER is not defined in config.txt or does not exist.")
+      print(r"Enter the full path to the dumps folder (Eg. C:\PCSX2\textures\SLUS-21214\dumps): ")
+      print(f"{Style.RESET_ALL} ")
+      user_input_path = input("full path: ")
+      
+      # Validate if the entered path exists
+      while not os.path.exists(user_input_path):
+          print()  # Add a line break 
+          print(f"{Fore.RED}ERROR:{Style.RESET_ALL} The specified folder does not exist. Please enter a valid path.")
+          user_input_path = input("Enter the path to the DUMPS FOLDER: ")
+
+      # Use the user's input for dumps_path
+      dumps_path = user_input_path
+
+  # Output the value of dumps_path
+  print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL}  DUMPS FOLDER is defined and confirmed to exist at: ==============#")
+  print(f"\n|     └-----→  {Fore.GREEN}{dumps_path}{Style.RESET_ALL}")
+  print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
+  print()  # Add a line break 
+
+
+  # Check if uniform_slot_name is not defined or the folder does not exist
+  if not uniform_slot_name:
+      # Prompt the user to enter a path
+      print()  # Add a line break 
+      print(f"{Fore.YELLOW}[!] The UNIFORM SLOT NAME is not defined in config.txt.")
+      print("Enter the name in the format of teamname-slotname (Eg. appstate-alt03, appstate-home, etc.): ")
+      print(f"{Style.RESET_ALL} ")
+      uniform_slot_name = input("teamname-slotname: ")
+  # Output the value of uniform_slot_name
+  print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL}  UNIFORM SLOT NAME is defined as: ================================#")    
+  print(f"\n|     └-----→  {Fore.GREEN}{uniform_slot_name}{Style.RESET_ALL} ")
+  print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
+  print()  # Add a line break 
+
+  # Check if uniform_type is not defined 
+  if not uniform_type:
+      # Prompt the user to enter a path
+      print()  # Add a line break 
+      print(f"{Fore.YELLOW}[!] The UNIFORM TYPE is not defined in config.txt. \nAre you making a dark uniform or a light uniform? (dark/light):{Style.RESET_ALL}")
+      uniform_type = input("dark or light: ")
+  # Add a condition to check the uniform type and set the appropriate path
+  if uniform_type.lower() == 'dark':
+      uniform_type_output = "DARK"
+      reference_folder = "reference-dark"
+  elif uniform_type.lower() == 'light':
+      uniform_type_output = "LIGHT"
+      reference_folder = "reference-light"
+  else:
+      uniform_type_output = "Invalid input. Assuming DARK uniform."
+      reference_folder = "reference-dark"
+  # Output the value of uniform_type
+  print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL} UNIFORM TYPE is: =================================================#")
+  print(f"\n|     └-----→  {Fore.GREEN}{uniform_type_output}{Style.RESET_ALL} ")
+  print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
+  # Output the selected default textures folder
+  print(f" └→ The reference folder for the {uniform_type} uniform is set to: {reference_folder}. Feel free to put your actual dumped textures in here (or its alts subfolder) if the image matching utility is having trouble finding a match.")
+  print()  # Add a line break 
+
+
+# General Config Settings for both methods
+
+
+# Photshop or Photopea (must rename files if photopea)
+if not photoshop_pref:
+    # Prompt the user to enter a path
+    print()  # Add a line break 
+    print(f"{Fore.YELLOW}[!] The PHOTOSHOP/PHOTOPEA preference is not defined in config.txt. \nWere the TC Gear textures exported from Photoshop or PhotoPea? :{Style.RESET_ALL}")
+    print()
+    print("1. Photoshop (files named: 01-TC_Wrist.png, 03-TC_QB_Wrist.png, etc.)")
+    print("2. PhotoPea (files named: img1.png, img3.png, etc.)")
+    print()
+
+    # Prompt the user to choose a numbered option
+    print("Enter the number of your choice: ")
+    photoshop_pref = input(": ")
+
+# Choose the appropriate mapping based on user choice
+if photoshop_pref == '1':
+    # Use primary names
+    photoshop_pref_output = "PhotoSHOP"
+elif photoshop_pref == '2':
+    # Use secondary names
+    photoshop_pref_output = "PhotoPEA"
+    # run renaming function after the user presses enter 
+else:
+    print("Invalid choice. Assuming Photoshop naming.")
+
+# Output the value of uniform_type
+print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL} TEXTURES WERE MADE/NAMED WITH: ==================================#")
+print(f"\n|     └-----→  {Fore.GREEN}{photoshop_pref_output}{Style.RESET_ALL} ")
+if photoshop_pref == '2':
+    print(f"\n|              {Fore.GREEN}The files in YOUR_TEXTURES_HERE will be converted to Photoshop names.{Style.RESET_ALL} ")
+print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
+print()
+
+# Function to rename files to photoshop naming convention if made with photopea
+def rename_photopea_files(source_folder, texture_name_mapping):
+    for old_name, new_name in texture_name_mapping.items():
+        old_path = os.path.join(source_folder, old_name)
+        new_path = os.path.join(source_folder, new_name)
+
+        if os.path.exists(old_path):
+            os.rename(old_path, new_path)
+            # print(f'Renamed {old_name} to {new_name}')
+        else:
+            print(f'ERROR: Missing required texture file: {old_name}')
+
+texture_name_mapping = {
+    'img1.png': '01-TC_Wrist.png',
+    'img3.png': '03-TC_QB_Wrist.png',
+    'img4.png': '04-TC_Thin_Band.png',
+    'img6.png': '06-TC_Face_Protector.png',
+    'img7.png': '07-TC_Med_Band--34_sleeve_top.png',
+    'img10.png': '10-Wt_TC_Pad.png',
+    'img11.png': '11-TC_Half_Sleeve.png',
+    'img13.png': '13-Sock.png',
+    'img14.png': '14-Bk_TC_Pad.png',
+    'img15.png': '15-TC_Long_Sleeve.png',
+    'img16.png': '16-Shoe.png',
+    'img17.png': '17-Shoe_w_White_Tape.png',
+    'img18.png': '18-Facemask_Far.png',
+    'img20.png': '20-Facemask_Near.png',
+    'img22.png': '22-Chinstrap.png',
+    'img23.png': '23-Shoe_w_Black_Tape.png',
+    'img24.png': '24-Shoe_w_TC_Tape.png',
+    'img25.png': '25-TC_Face_Protector_Top.png',
+}
+
+
+# Functions for other configurations and preferences
+def prompt_user(message):
+    print()  # Add a line break
+    print(f"{Fore.YELLOW}[!] {message}{Style.RESET_ALL}")
+    user_input = input("YES (y) or NO (n/Enter): ").lower()
+    return user_input in ["yes", "y"]
+
+def prompt_preference(pref_name, question, header_text, answer_yes, extra_yes, answer_no, extra_no):
+    if pref_name is not None and pref_name != "":
+        pref_value = pref_name
+    else:
+        pref_value = prompt_user(question)
+
+    answer = answer_yes if pref_value in ['yes', 'y', True] else answer_no
+
+    output = f"{header_text}==================================#"
+    print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL} {output}")
+    print(f"\n|     └-----→  {Fore.GREEN}{answer}{Style.RESET_ALL}")
+    if pref_value:
+        print(f"\n|              {Fore.GREEN}{extra_yes if answer == answer_yes else extra_no}{Style.RESET_ALL}")
+    else:
+        print(f"\n|              {Fore.GREEN}{extra_yes if answer == answer_yes else extra_no}{Style.RESET_ALL}")
+    print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
+    print()
+
+    return pref_value
+
+# Pride Stickers
+pridesticker_pref = prompt_preference(pridesticker_pref,
+                                      "The helmet PRIDE STICKER preference is not defined in config.txt. \nDoes this uniform use helmet pride stickers? (y / n): ",
+                                      "HELMET PRIDE STICKERS?: ========", "YES, the uniform uses helmet pride stickers.",
+                                      "Be sure to provide a custom pridesticker.png.",
+                                      "NO, the uniform does not use helmet pride stickers.",
+                                      "The tool will automatically disable/transparent them.")
+
+# Helmet Numbers
+helmetnumbers_pref = prompt_preference(helmetnumbers_pref,
+                                      "The HELMET NUMBERS preference is not defined in config.txt. \nDoes this uniform have numbers on the back or side of the helmet? (y / n): ",
+                                      "HELMET NUMBERS?: ================", "YES, the uniform uses helmet numbers.",
+                                      "Helmet numbers will be copied (or created from the main numbers).",
+                                      "NO, the uniform does not use helmet numbers.",
+                                      "Only the name will be recorded in the CSV. No textures will be copied.")
+
+# Sleeve/Shoulder Numbers
+ssnumbers_pref = prompt_preference(ssnumbers_pref,
+                                      "The SLEEVE/SHOULDER NUMBERS preference is not defined in config.txt. \nDoes this uniform have numbers on the sleeves or top of the shoulders? (y / n): ",
+                                      "SLEEVE/SHOULDER NUMBERS?: ======", "YES, the uniform uses SLEEVE/SHOULDER numbers.",
+                                      "SLEEVE/SHOULDER numbers will be copied (or created from the main numbers).",
+                                      "NO, the uniform does not use SLEEVE/SHOULDER numbers.",
+                                      "Only the name will be recorded in the CSV. No textures will be copied.")
+
+
+
 
 ############################################################################
 # IMAGE MATCHING IF NO CSV OVERRIDE PROVIDED
 if csv_provided == False:
 
-    # Configuration settings stage...
-
-    print()  # Add a line break 
-    print()  # Add a line break 
-    print(f"{Fore.BLUE}+++++++++++++++++++++++ CONFIGURATION SETTINGS +++++++++++++++++++++++{Style.RESET_ALL}") 
-    print()  # Add a line break 
-    print("You can define these in the config.txt file.") 
-    print()  # Add a line break 
-
-    # Check if dumps_path is not defined or the folder does not exist
-    if not dumps_path or not os.path.exists(dumps_path):
-        # Prompt the user to enter a path
-        print()  # Add a line break 
-        user_input_path = input(r"[!] The path to the DUMPS FOLDER is not defined in config.txt or does not exist. Enter the full path to the dumps folder (Eg. C:\PCSX2\textures\SLUS-21214\dumps): ")
-        
-        # Validate if the entered path exists
-        while not os.path.exists(user_input_path):
-            print()  # Add a line break 
-            print(f"{Fore.RED}ERROR:{Style.RESET_ALL} The specified folder does not exist. Please enter a valid path.")
-            user_input_path = input("Enter the path to the DUMPS FOLDER: ")
-
-        # Use the user's input for dumps_path
-        dumps_path = user_input_path
-
-    # Output the value of dumps_path
-    print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL}  DUMPS FOLDER is defined and confirmed to exist at: ==============#")
-    print(f"\n|     └-----→  {Fore.GREEN}{dumps_path}{Style.RESET_ALL}")
-    print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
-    print()  # Add a line break 
-
-
-    # Check if uniform_slot_name is not defined or the folder does not exist
-    if not uniform_slot_name:
-        # Prompt the user to enter a path
-        print()  # Add a line break 
-        uniform_slot_name = input("[!] The UNIFORM SLOT NAME is not defined in config.txt. Enter the name in the format of teamname-slotname (Eg. appstate-alt03, appstate-home, etc.): ")
-    # Output the value of uniform_slot_name
-    print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL}  UNIFORM SLOT NAME is defined as: ================================#")    
-    print(f"\n|     └-----→  {Fore.GREEN}{uniform_slot_name}{Style.RESET_ALL} ")
-    print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
-    print()  # Add a line break 
-
-    # Check if uniform_type is not defined or the folder does not exist
-    if not uniform_type:
-        # Prompt the user to enter a path
-        print()  # Add a line break 
-        uniform_type = input("[!] The UNIFORM TYPE is not defined in config.txt. Are you making a dark uniform or light uniform? (dark/light): ")
-    # Output the value of uniform_type
-    print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL} UNIFORM TYPE is: =================================================#")
-    print(f"\n|     └-----→  {Fore.GREEN}{uniform_type}{Style.RESET_ALL} ")
-    print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
-    # Add a condition to check the uniform type and set the appropriate path
-    if uniform_type.lower() == 'dark':
-        reference_folder = "reference-dark"
-    elif uniform_type.lower() == 'light':
-        reference_folder = "reference-light"
-    else:
-        print("Invalid input. Assuming dark uniform.")
-        reference_folder = "reference-dark"
-    # Output the selected default textures folder
-    print(f" └→ The reference folder for the {uniform_type} uniform is set to: {reference_folder}. Feel free to put your actual dumped textures in here (or its alts subfolder) if the image matching utility is having trouble finding a match.")
-    print()  # Add a line break 
-
-
-    # Check if pridesticker_transparent is defined in the config
-    if pridesticker_transparent is not None and pridesticker_transparent != "":
-        transparent_pride_stickers = pridesticker_transparent
-    else:
-        # Function to ask if the pride stickers should be transparent
-        def prompt_transparent_pride_stickers():
-            print()  # Add a line break 
-            user_input = input("[!] The PRIDE STICKER PREFERENCE is not defined in config.txt. Do you want to make the pride stickers transparent? (yes/no): ").lower()
-            return user_input == "yes" or user_input == "y"
-
-        # Check if user wants to make pride stickers transparent
-        transparent_pride_stickers = prompt_transparent_pride_stickers()
-
-    # Output the value of pridesticker_transparent
-    print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL} PRIDE STICKERS TRANSPARENTED?:  ==================================#")
-    print(f"\n|     └-----→  {Fore.GREEN}{transparent_pride_stickers}{Style.RESET_ALL}")
-    print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
-
-
-    # Ask the user to press Enter to continue
+    # Pre-run Checklist
     print()  # Add a line break 
     print()  # Add a line break 
     print(f"{Fore.BLUE}++++++++++++++++++++++++++ PRE-RUN CHECKLIST ++++++++++++++++++++++++++{Style.RESET_ALL}")
     print()  # Add a line break 
-    print("Before we begin, your dumps folder is expected to contain all 30-34 dumped textures.")
+    print("Before we begin, your dumps folder is expected to contain all 30-34 dumped textures")
     print("for your chosen uniform type (light/dark). To dump all of these, you must have: ")
     print()  # Add a line break 
-    print(" • Reset your rosters to that of the development ISO (so all gear gets used)")
+    print(" • Used the dumps ISO not the dev ISO or the normal mod ISO (so all numbers get dumped)")
+    print(" • Reset your rosters to that of the ISO default (so all gear gets used)")
     print(" • Set the game weather to cold (so the Face Protector is worn)")
     print(" • Deleted everything in your dumps folder during the game loading screen (after the uniform")
     print("   selection screen and prior to the coin toss)")
@@ -216,6 +339,10 @@ if csv_provided == False:
     print("#                                                          #")
 
 
+    # Rename the source files if they were made with photopea
+    if photoshop_pref == '2':
+        rename_photopea_files(source_folder, texture_name_mapping)
+
     # Extract the first segment of uniform_slot_name
     if '-' in uniform_slot_name:
         teamname = uniform_slot_name.split('-')[0]
@@ -229,7 +356,7 @@ if csv_provided == False:
         slotname = uniform_slot_name
 
     # Open a CSV file for writing
-    csv_filename = f"{uniform_slot_name}.csv"
+    csv_filename = f"textures-{uniform_slot_name}.csv"
     csv_file_path = os.path.join(script_dir, csv_filename)
     with open(csv_file_path, mode='w', newline='') as csvfile:
         fieldnames = ['TEAM NAME', 'SLOT', 'TYPE', 'TEXTURE', 'FILENAME']
@@ -467,12 +594,12 @@ if csv_provided == False:
                         found_number = found_filename_base[3:5]
                         
                         if base_image_number == found_number:
-                            # Create transparents subfolder if it doesn't exist
-                            if not os.path.exists(os.path.join(renamed_folder, "transparents", renamed_subfolder)):
-                                os.makedirs(os.path.join(renamed_folder, "transparents", renamed_subfolder))
+                            # Create subfolder if it doesn't exist
+                            if not os.path.exists(os.path.join(renamed_folder, renamed_subfolder)):
+                                os.makedirs(os.path.join(renamed_folder, renamed_subfolder))
                             # Copy a transparent to the 'renamed' folder and rename 
                             new_file_name = f"{found_filename_base}.png"
-                            shutil.copy(os.path.join(default_textures_folder, "transparent.png"), os.path.join(renamed_folder, "transparents", renamed_subfolder, new_file_name))
+                            shutil.copy(os.path.join(default_textures_folder, "transparent.png"), os.path.join(renamed_folder, renamed_subfolder, new_file_name))
                             print("NUMBER SHADOW TRANSPARENTED")
                             print(f"{checkmark} SUCCESS. Transparent renamed and filename added to the CSV file.")
                             required_textures_counter += 1
@@ -483,61 +610,91 @@ if csv_provided == False:
                 # If answered yes to transparent pride sticker, copy the transparent image instead of a source image
                 elif file == "pridesticker.png":
                     new_file_name = f"{found_filename}.png"
-                    if transparent_pride_stickers:
-                      # Create transparents subfolder if it doesn't exist
-                      if not os.path.exists(os.path.join(renamed_folder, "transparents", "pride-sticker")):
-                          os.makedirs(os.path.join(renamed_folder, "transparents", "pride-sticker"))
-                      # Copy a transparent to the 'renamed' folder and rename 
-                      shutil.copy(os.path.join(default_textures_folder, "transparent.png"), os.path.join(renamed_folder, "transparents", "pride-sticker", new_file_name))
-                      print("PRIDE STICKER TRANSPARENTED")
-                      # Write to the CSV file
-                      csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
-                      print(f"{checkmark} SUCCESS. Transparent texture renamed and filename added to the CSV file.")
-                      required_textures_counter += 1
+                    # Create Pride Sticker subfolder if it doesn't exist
+                    if not os.path.exists(os.path.join(renamed_folder, "pride-sticker")):
+                        os.makedirs(os.path.join(renamed_folder, "pride-sticker"))
+                    if pridesticker_pref:
+                        pridesticker_path = os.path.join(source_folder, source_image)
+                        # Check if source_image exists
+                        if os.path.exists(pridesticker_path):
+                            # Copy and rename pridesticker.png folder and rename 
+                            shutil.copy(pridesticker_path, os.path.join(renamed_folder, "pride-sticker", new_file_name))
+                            # Write to the CSV file
+                            csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
+                            print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
+                            required_textures_counter += 1
+                        else:
+                            # Print error message
+                            print()
+                            print(f"###########################################################")
+                            print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
+                            print(f"{Fore.RED}!!! ERROR:{Style.RESET_ALL} You want to use a pride sticker but no pridesticker.png source file exists in YOUR_TEXTURES. Add the source file and try again, or choose 'no' for the Pride Sticker preference next time.")
+                            print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
+                            print(f"###########################################################")
+                            # Wait for user to press enter
+                            print("Press Enter to exit the program.")
+                            input()
+                            sys.exit()
                     else: 
-                      shutil.copy(os.path.join(source_folder, source_image), os.path.join(renamed_folder, new_file_name))
-                      # Write to the CSV file
-                      csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
-                      print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
-                      required_textures_counter += 1
+                        # Copy a transparent to the 'renamed' folder and rename 
+                        shutil.copy(os.path.join(default_textures_folder, "transparent.png"), os.path.join(renamed_folder, "pride-sticker", new_file_name))
+                        print("PRIDE STICKER TRANSPARENTED")
+                        # Write to the CSV file
+                        csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
+                        print(f"{checkmark} SUCCESS. Transparent texture renamed and filename added to the CSV file.")
+                        required_textures_counter += 1
                 
-                # If no helmet or sleeve/shoulder numbers are provided, use the main jersey numbers
-                secondary_07_numbers = ["num07helmet.png", "num07ss.png"]
-                if os.path.basename(file) in secondary_07_numbers:
-                  helmet_file = os.path.join(source_folder, os.path.basename(file))
-                  if os.path.exists(helmet_file):
+                # HELMET AND SLEEVE/SHOULDER NUMBERS
+                secondary_numbers = ["num07helmet.png", "num89helmet.png", "num07ss.png", "num89ss.png"]
+                if os.path.basename(file) in secondary_numbers:
+                  numbers_filename = os.path.basename(file)
+                  numbers_file = os.path.join(source_folder, os.path.basename(file))
+                  
+                  # determine if 07 or 89
+                  if numbers_filename == "num07helmet.png" or numbers_filename == "num07ss.png":
+                      numbers_main = "num07.png"
+                  elif numbers_filename == "num89helmet.png" or numbers_filename == "num89ss.png":
+                      numbers_main = "num89.png"
+                  
+                  # determine if helmet or ss
+                  if numbers_filename == "num07helmet.png" or numbers_filename == "num89helmet.png":
+                      numbers_type = "helmet"
+                  elif numbers_filename == "num07ss.png" or numbers_filename == "num89ss.png":
+                      numbers_type = "ss"
+                  
+                  #check if there is a specific texture provided for the helmet numbers
+                  if os.path.exists(numbers_file):
                       new_file_name = f"{found_filename}.png"
-                      shutil.copy(helmet_file, os.path.join(renamed_folder, new_file_name))
+                      if helmetnumbers_pref and numbers_type == "helmet":
+                          shutil.copy(numbers_file, os.path.join(renamed_folder, new_file_name))
+                          success_msg = "Texture renamed and filename added to the CSV file."
+                          optional_textures_counter += 1
+                      elif ssnumbers_pref and numbers_type == "ss":
+                          shutil.copy(numbers_file, os.path.join(renamed_folder, new_file_name))
+                          success_msg = "Texture renamed and filename added to the CSV file."
+                          optional_textures_counter += 1
+                      else:
+                          success_msg = "Filename added to the CSV file. No texture used."
                       # Write to the CSV file
                       csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
-                      print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
-                      optional_textures_counter += 1
+                      print(f"{checkmark} SUCCESS. {success_msg}")
+                  
+                  # If no helmet or sleeve/shoulder numbers are provided, use the main jersey numbers
                   else:
                       new_file_name = f"{found_filename}.png"
-                      shutil.copy(os.path.join(source_folder, "num07.png"), os.path.join(renamed_folder, new_file_name))
+                      if helmetnumbers_pref and numbers_type == "helmet":
+                          shutil.copy(os.path.join(source_folder, numbers_main), os.path.join(renamed_folder, new_file_name))
+                          success_msg = "Texture (used main numbers) renamed and filename added to the CSV file."
+                          optional_textures_counter += 1
+                      elif ssnumbers_pref and numbers_type == "ss":
+                          shutil.copy(os.path.join(source_folder, numbers_main), os.path.join(renamed_folder, new_file_name))
+                          success_msg = "Texture (used main numbers) renamed and filename added to the CSV file."
+                          optional_textures_counter += 1
+                      else:
+                          success_msg = "Filename added to the CSV file. No texture used."
                       # Write to the CSV file
                       csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
-                      print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
-                      optional_textures_counter += 1
-
-
-                secondary_89_numbers = ["num89helmet.png", "num89ss.png"]
-                if os.path.basename(file) in secondary_89_numbers:
-                    helmet_file = os.path.join(source_folder, os.path.basename(file))
-                    if os.path.exists(helmet_file):
-                        new_file_name = f"{found_filename}.png"
-                        shutil.copy(helmet_file, os.path.join(renamed_folder, new_file_name))
-                        # Write to the CSV file
-                        csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
-                        print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
-                        optional_textures_counter += 1
-                    else:
-                        new_file_name = f"{found_filename}.png"
-                        shutil.copy(os.path.join(source_folder, "num89.png"), os.path.join(renamed_folder, new_file_name))
-                        # Write to the CSV file
-                        csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
-                        print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
-                        optional_textures_counter += 1
+                      print(f"{checkmark} SUCCESS. {success_msg}")
 
                 
                 # Everything else
@@ -670,9 +827,16 @@ if csv_provided == False:
     # Redefine the 'renamed' folder
     renamed_folder = os.path.join(script_dir, "RENAMED", renamed_subfolder)
 
+    # Create csv subfolder if it doesn't exist
+    if not os.path.exists(os.path.join(renamed_folder, "csv-texture-names")):
+        os.makedirs(os.path.join(renamed_folder, "csv-texture-names"))
+    
     # Move the CSV file to the 'renamed' folder
-    shutil.move(csv_file_path, os.path.join(renamed_folder, csv_filename))
-    shutil.copy(config_file_path, os.path.join(renamed_folder, 'config.txt'))
+    shutil.move(csv_file_path, os.path.join(renamed_folder, "csv-texture-names", csv_filename))
+
+    print()
+    print(f"{checkmark} CSV file copied to subfolder.")
+
     print()  # Add a line break 
     print("#--------------------------------------------------------------#")
     print("#                                                              #")
@@ -693,7 +857,6 @@ if csv_provided == False:
     print("#       READ ALL OF THE OUTPUT ABOVE TO CHECK FOR ISSUES.      #")
     print("#      Your renamed textures are in a subfolder of RENAMED.    #")
     print("# The texture names were written to a CSV file in that folder. #")
-    print("#     (a copy of your config file has also been put there)     #")
     print("#  Be sure to leave the CSV file in the folder and submit it   #")
     print("#    with the uniform for easy future edits of this slot.      #")
     print("#                                                              #")
@@ -712,22 +875,6 @@ if csv_provided == False:
 # SKIP IMAGE MATCHING AND USE THE TEXTURES NAMES IN THE CSV, IF PROVIDED
 elif csv_provided == True:
 
-
-    # Function to ask if the pride stickers should be transparent
-    def ask_transparent_pride_stickers():
-        print()  # Add a line break 
-        user_input = input("Do you want to make the pride stickers transparent? (y / n): ").lower()
-        return user_input not in ["no", "n"]
-
-    # Check if the user wants to make pride stickers transparent
-    transparent_pride_stickers_csv = ask_transparent_pride_stickers()
-
-
-    # Output the value of pridesticker_transparent
-    print(f"\n{Fore.BLUE}[•]{Style.RESET_ALL} PRIDE STICKERS TRANSPARENTED?:  {Fore.GREEN}{transparent_pride_stickers_csv}{Style.RESET_ALL}")
-
-    print()
-    print()
 
     # Define the transparent file and check if it exists
     transparent_source_path = os.path.join(default_textures_folder, 'transparent.png')
@@ -755,6 +902,11 @@ elif csv_provided == True:
         print()
         input()
         sys.exit(1)
+
+
+    # Rename the source files if they were made with photopea
+    if photoshop_pref == '2':
+        rename_photopea_files(source_folder, texture_name_mapping)
 
     # CHECK FOR MISSING REQUIRED TEXTURES
     required_textures_to_check = [
@@ -829,6 +981,20 @@ elif csv_provided == True:
         sys.exit(1)
 
 
+    # Ask the user to press Enter to continue
+    print()  # Add a line break 
+    print(f"{Fore.BLUE}___{Style.RESET_ALL}")
+    print()  # Add a line break 
+    print("Review the configuration settings above.")
+    print("If you are ready to proceed, PRESS ENTER to continue.")
+    input()  # Add a line break 
+
+    print()  # Add a line break 
+    print("#----------------------------------------------------------#")
+    print("#                                                          #")
+    print("#                     RESULTS:                             #")
+    print("#                                                          #")
+
 
     # Open the CSV file for the file renaming process
     for csv_file in csv_files:
@@ -865,19 +1031,15 @@ elif csv_provided == True:
                 # Ensure the subfolder exists, create it if not
                 os.makedirs(subfolder_path, exist_ok=True)
 
-                # Create "transparents" subfolder inside subfolder_path
-                transparents_subfolder = os.path.join(subfolder_path, "transparents")
-                os.makedirs(transparents_subfolder, exist_ok=True)
-                            
                 # Number shadows
                 if texture == 'num07shadow.png':
-                    num07_shadow_folder = os.path.join(transparents_subfolder, 'num07-shadow')
+                    num07_shadow_folder = os.path.join(subfolder_path, 'num07-shadow')
                     os.makedirs(num07_shadow_folder, exist_ok=True)
                     transparent_destination_path = os.path.join(num07_shadow_folder, filename)
                     shutil.copy2(transparent_source_path, transparent_destination_path)
                     print(f"{checkmark} num07shadow (transparented) copied and renamed.")
                 elif texture == 'num89shadow.png':
-                    num89_shadow_folder = os.path.join(transparents_subfolder, 'num89-shadow')
+                    num89_shadow_folder = os.path.join(subfolder_path, 'num89-shadow')
                     os.makedirs(num89_shadow_folder, exist_ok=True)
                     transparent_destination_path = os.path.join(num89_shadow_folder, filename)
                     shutil.copy2(transparent_source_path, transparent_destination_path)
@@ -885,28 +1047,55 @@ elif csv_provided == True:
                 
                 # Num07ss
                 elif texture == 'num07ss.png':
-                    copy_numbers(source_folder, subfolder_path, filename, 'num07ss.png', 'num07.png')
+                    if ssnumbers_pref:
+                        copy_numbers(source_folder, subfolder_path, filename, 'num07ss.png', 'num07.png')
+                    else:
+                        print("- Skipped num07ss.png.")
                 # Num89ss
                 elif texture == 'num89ss.png':
-                    copy_numbers(source_folder, subfolder_path, filename, 'num89ss.png', 'num89.png')
+                    if ssnumbers_pref:
+                        copy_numbers(source_folder, subfolder_path, filename, 'num89ss.png', 'num89.png')
+                    else:
+                        print("- Skipped num89ss.png.")
                 # Num07helmet
                 elif texture == 'num07helmet.png':
-                    copy_numbers(source_folder, subfolder_path, filename, 'num07helmet.png', 'num07.png')
+                    if helmetnumbers_pref:
+                        copy_numbers(source_folder, subfolder_path, filename, 'num07helmet.png', 'num07.png')
+                    else:
+                        print("- Skipped num07helmet.png")
                 # Num89helmet
                 elif texture == 'num89helmet.png':
-                    copy_numbers(source_folder, subfolder_path, filename, 'num89helmet.png', 'num89.png')
+                    if helmetnumbers_pref:
+                        copy_numbers(source_folder, subfolder_path, filename, 'num89helmet.png', 'num89.png')
+                    else:
+                        print("- Skipped num89helmet.png")
 
                 # Pride Sticker
                 elif texture == 'pridesticker.png':
-                    if transparent_pride_stickers_csv:
-                        pridesticker_folder = os.path.join(transparents_subfolder, 'pride-sticker')
-                        os.makedirs(pridesticker_folder, exist_ok=True)
+                    pridesticker_folder = os.path.join(subfolder_path, 'pride-sticker')
+                    os.makedirs(pridesticker_folder, exist_ok=True)
+                    if pridesticker_pref:
+                        pridesticker_path = os.path.join(source_folder, texture)
+                        # Check if source_image exists
+                        if os.path.exists(pridesticker_path):
+                            pridesticker_source_path = pridesticker_path
+                            pridesticker_output = ".png"
+                        else:
+                            # Print error message
+                            print()
+                            print(f"###########################################################")
+                            print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
+                            print(f"{Fore.RED}!!! ERROR:{Style.RESET_ALL} You want to use a pride sticker but no pridesticker.png source file exists in YOUR_TEXTURES. Add the source file and try again, or choose 'no' for the Pride Sticker preference next time.")
+                            print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
+                            print(f"###########################################################")
+                            # Wait for user to press enter
+                            print("Press Enter to exit the program.")
+                            input()
+                            sys.exit()
+                        
+                    else:
                         pridesticker_source_path = os.path.join(default_textures_folder, 'transparent.png')
                         pridesticker_output = " (transparented)"
-                    else:
-                        pridesticker_source_path = os.path.join(source_folder, texture)
-                        pridesticker_folder = subfolder_path
-                        pridesticker_output = ".png"
                     transparent_destination_path = os.path.join(pridesticker_folder, filename)
                     shutil.copy2(pridesticker_source_path, transparent_destination_path)
                     print(f"{checkmark} pridesticker{pridesticker_output} copied and renamed.")
@@ -934,12 +1123,17 @@ elif csv_provided == True:
 
     for csv_file in csv_files:
         csv_source_path = os.path.join(csv_folder, csv_file)
-        csv_destination_path = os.path.join(subfolder_path, csv_file)  # Adjust the filename accordingly
 
+        # Create csv subfolder if it doesn't exist
+        if not os.path.exists(os.path.join(subfolder_path, "csv-texture-names")):
+            os.makedirs(os.path.join(subfolder_path, "csv-texture-names"))
+        
+        csv_destination_path = os.path.join(subfolder_path, "csv-texture-names", csv_file)  # Adjust the filename accordingly
+        
         # Copy the CSV file to the destination with the specified filename
         shutil.copy2(csv_source_path, csv_destination_path)
         print()
-        print(f"{checkmark} CSV file copied to subfolder.")
+        print(f"{checkmark} CSV file copied to subfolder > csv-texture-names.")
 
     print()
     print()  # Add a line break 

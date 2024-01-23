@@ -3,6 +3,7 @@
 # Project-specific ignores
 ################################################
 RENAMED/
+RENAMED-DONE/
 dist/
 build/
 *.spec

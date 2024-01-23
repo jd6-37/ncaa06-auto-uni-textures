@@ -11,11 +11,21 @@ dumps_path = r"/Users/j/Library/Application Support/AetherSX2/textures/SLUS-2121
 #### The uniform name in the format of in the format of teamname-slotname (Eg. appstate-alt03, appstate-home, etc.)
 uniform_slot_name = "southern-alt18"
 
-#### Dark (home) uniform or light (away) uniform? (dark/light)
+#### Is this a DARK (typically home) uniform or LIGHT uniform? (dark/light)
 uniform_type = "light"
 
-#### Should the pride stickers be transparented (yes) or does the uniform use pride stickers (no)?
-pridesticker_transparent = "yes"
+#### Were the TC Gear textures made in Photoshop (1) or Photopea(2)? (1/2)
+#### Photshop file names are 01-TC_Wrist.png, etc. PhotoPea names are img1.png, img3.png, etc. 
+photoshop_pref = "2"
+
+#### Does this uniform use helmet PRIDE STICKERS? (yes/no)
+pridesticker_pref = "yes"
+
+#### Does this uniform use HELMET NUMBERS (any kind, back or side)? (yes/no)
+helmetnumbers_pref = ""
+
+#### Does this uniform use SLEEVE/SHOULDER NUMBERS? (yes/no)
+ssnumbers_pref = ""
 
 ####---- IMAGE MATCHING ----#
 # Define the defaults and custom hash_tolerance and ssim_threshold values 
