@@ -5,10 +5,16 @@
 RENAMED/
 dist/
 build/
-*.zip
 *.spec
 output.csv
 *-BAK.*
+reference-light.zip 
+reference-sets-bright.zip 
+reference-sets-dim.zip 
+reference-sets-neutral-default.zip 
+reference.zip
+default-textures.zip 
+put_exported_textures_in_here.zip
 
 ############################################
 # Global across projects system files, etc. 
@@ -49,7 +55,7 @@ tags
 *.jar
 *.rar
 *.tar
-*.zip
+# *.zip
 
 # Output folders
 # dist/
