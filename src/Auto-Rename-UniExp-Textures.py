@@ -296,6 +296,20 @@ ssnumbers_pref = prompt_preference(ssnumbers_pref,
 
 
 
+# Function to convert config's string values to booleans
+def convert_to_boolean(value):
+    if value is not None:
+        return str(value).strip().lower() in ["yes", "true"]
+    return False
+
+# Extract pridesticker_pref from the config
+pridesticker_pref = convert_to_boolean(pridesticker_pref)
+
+# Extract helmetnumbers_pref from the config
+helmetnumbers_pref = convert_to_boolean(helmetnumbers_pref)
+
+# Extract ssnumbers_pref from the config
+ssnumbers_pref = convert_to_boolean(ssnumbers_pref)
 
 ############################################################################
 # IMAGE MATCHING IF NO CSV OVERRIDE PROVIDED
@@ -1074,6 +1088,7 @@ elif csv_provided == True:
                 elif texture == 'pridesticker.png':
                     pridesticker_folder = os.path.join(subfolder_path, 'pride-sticker')
                     os.makedirs(pridesticker_folder, exist_ok=True)
+                    print(pridesticker_pref)
                     if pridesticker_pref:
                         pridesticker_path = os.path.join(source_folder, texture)
                         # Check if source_image exists
