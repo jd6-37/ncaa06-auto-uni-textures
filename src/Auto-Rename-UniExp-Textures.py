@@ -69,7 +69,7 @@ print("#####################################################################")
 print("#                                                                   #")
 print("#       NCAA NEXT Uniform Expansion Texture Renaming Utility        #")
 print("#                                                                   #")
-print("#                     Version: 0.4.0-beta                           #")
+print("#                     Version: 0.4.2-beta                           #")
 print("#                                                                   #")
 print("#####################################################################")
 
@@ -744,13 +744,13 @@ if csv_provided == False:
             if file in ["17-Shoe_w_White_Tape.png"]:
               print(f"###########################################################")
               print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
-              print(f"{Fore.BLUE}[•]{Style.RESET_ALL} ==== NO similar images found for {file}. Try raising the hash_tolerance to 2 or more and/or lowering the ssim_threshold for this item in config.txt to broaden the search. Alternatively, you can replace the reference texture with the actual dumped texture for a definite match. ====")
+              print(f"{Fore.BLUE}[•]{Style.RESET_ALL} ==== NO similar images found for {file}. Are you sure the texture dumped? If so...try raising the hash_tolerance to 2 or more and/or lowering the ssim_threshold for this item in config.txt to broaden the search. Alternatively, you can replace the reference texture with the actual dumped texture for a definite match. ====")
               print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
               print(f"###########################################################")
             if file in ["13-Sock.png"]:
               print(f"###########################################################")
               print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
-              print(f"{Fore.BLUE}[•]{Style.RESET_ALL} ==== NO similar images found for {file}. The light uniform's sock is a particularly troublesome texture. The only solution is go find the actual dumped texture in your dumps folder, and then add it to the ALTS-SOCK folder inside the REFERENCE-LIGHT directory (or, if a dark uniform, in the REFERENCE-DARK directory). You don't need to rename it. Also, please ping @JD637 on Discord with this sock texture attached so he can add it to the tool for others.  ====")
+              print(f"{Fore.BLUE}[•]{Style.RESET_ALL} ==== NO similar images found for {file}. Are you sure the texture dumped? If so...the light uniform's sock is a particularly troublesome texture. The only solution is go find the actual dumped texture in your dumps folder, and then add it to the ALTS-SOCK folder inside the REFERENCE-LIGHT directory (or, if a dark uniform, in the REFERENCE-DARK directory). You don't need to rename it. Also, please ping @JD637 on Discord with this sock texture attached so he can add it to the tool for others.  ====")
               print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
               print(f"###########################################################")
             elif file in ["num07helmet.png", "num89helmet.png"]:
@@ -760,7 +760,7 @@ if csv_provided == False:
             else:
               print(f"###########################################################")
               print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
-              print(f"{Fore.BLUE}[•]{Style.RESET_ALL} ==== NO similar images found for {file}. Try raising the hash_tolerance and/or lowering the ssim_threshold for this item in config.txt to broaden the search. Alternatively, you can replace the reference texture with the actual dumped texture for a definite match. ====")
+              print(f"{Fore.BLUE}[•]{Style.RESET_ALL} ==== NO similar images found for {file}. Are you sure the texture dumped? If so...try raising the hash_tolerance and/or lowering the ssim_threshold for this item in config.txt to broaden the search. Alternatively, you can copy the actual dumped texture into the ALTS folder inside the REFERENENCE-LIGHT/DARK and rename it {file} to ensure a match. ====")
               print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
               print(f"###########################################################")
 
@@ -1088,7 +1088,6 @@ elif csv_provided == True:
                 elif texture == 'pridesticker.png':
                     pridesticker_folder = os.path.join(subfolder_path, 'pride-sticker')
                     os.makedirs(pridesticker_folder, exist_ok=True)
-                    print(pridesticker_pref)
                     if pridesticker_pref:
                         pridesticker_path = os.path.join(source_folder, texture)
                         # Check if source_image exists

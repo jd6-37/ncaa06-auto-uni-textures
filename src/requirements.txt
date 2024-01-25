@@ -1,0 +1,5 @@
+Pillow
+imagehash
+opencv-python
+scikit-image
+colorama

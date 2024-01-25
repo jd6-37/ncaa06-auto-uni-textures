@@ -4,6 +4,7 @@
 ################################################
 RENAMED/
 RENAMED-DONE/
+RENAMED-DONE-OLD/
 dist/
 build/
 *.spec
@@ -16,6 +17,8 @@ reference-sets-neutral-default.zip
 reference.zip
 default-textures.zip 
 put_exported_textures_in_here.zip
+gather-csv.sh
+check-for-dupes.bat
 
 ############################################
 # Global across projects system files, etc. 
