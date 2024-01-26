@@ -8,6 +8,11 @@ Additionally, this utility can batch rename textures using a provided CSV file, 
 
 Download the "NCAANEXT-Auto-Rename-UniExp-Textures.zip" from the [latest release](https://github.com/jd6-37/ncaa06-auto-uni-textures/releases/latest), unzip it, and follow the instructions in the provided [README.txt](https://github.com/jd6-37/ncaa06-auto-uni-textures/blob/main/src/README.txt).
 
+### Video Tutorial
+
+[<img src="https://img.youtube.com/vi/VhjzkMKOtRI/hqdefault.jpg" width="600" height="300"
+/>](https://www.youtube.com/embed/VhjzkMKOtRI>)
+
 
 ## Credits
 
