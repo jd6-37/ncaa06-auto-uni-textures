@@ -24,15 +24,15 @@ photoshop_pref = "1"
 
 #### Does this uniform use helmet PRIDE STICKERS? (yes/no)
 #pridesticker_pref = ""
-pridesticker_pref = "yes"
+pridesticker_pref = "no"
 
 #### Does this uniform use HELMET NUMBERS (any kind, back or side)? (yes/no)
 #helmetnumbers_pref = ""
-helmetnumbers_pref = "yes"
+helmetnumbers_pref = "no"
 
 #### Does this uniform use SLEEVE/SHOULDER NUMBERS? (yes/no)
 #ssnumbers_pref = ""
-ssnumbers_pref = "yes"
+ssnumbers_pref = "no"
 
 
 
