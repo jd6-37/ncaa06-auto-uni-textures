@@ -69,7 +69,7 @@ print("#####################################################################")
 print("#                                                                   #")
 print("#       NCAA NEXT Uniform Expansion Texture Renaming Utility        #")
 print("#                                                                   #")
-print("#                     Version: 0.4.2-beta                           #")
+print("#                     Version: 0.4.3-beta                           #")
 print("#                                                                   #")
 print("#####################################################################")
 
