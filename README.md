@@ -10,6 +10,7 @@ Download the "NCAANEXT-Auto-Rename-UniExp-Textures.zip" from the [latest release
 
 ### Video Tutorial
 [https://img.youtube.com/vi/VhjzkMKOtRI/0.jpg](https://img.youtube.com/vi/VhjzkMKOtRI/0.jpg)
+
 [![](https://img.youtube.com/vi/VhjzkMKOtRI/0.jpg)](https://www.youtube.com/watch?v=VhjzkMKOtRI)
 
 
