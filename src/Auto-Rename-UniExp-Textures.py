@@ -6,6 +6,7 @@ import os
 import sys
 import csv
 import platform
+import glob
 from skimage.metrics import structural_similarity as compare_ssim
 from colorama import init, Fore, Style
 init()  # initialize colorama for ANSI color codes in Windows
@@ -209,19 +210,56 @@ if photoshop_pref == '2':
 print(f"\n#ˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉˉ#")
 print()
 
-# Function to rename files to photoshop naming convention if made with photopea
-def rename_photopea_files(source_folder, texture_name_mapping):
-    for old_name, new_name in texture_name_mapping.items():
-        old_path = os.path.join(source_folder, old_name)
-        new_path = os.path.join(source_folder, new_name)
 
-        if os.path.exists(old_path):
-            os.rename(old_path, new_path)
-            # print(f'Renamed {old_name} to {new_name}')
-        else:
-            print(f'ERROR: Missing required texture file: {old_name}')
+# Function to rename files to photoshop naming convention if made with photopea
+def rename_photopea_files(source_folder, texture_name_mapping, texture_name_mapping_old):
+    # Check if img1.png exists
+    img1_path = os.path.join(source_folder, 'img1.png')
+    
+    if os.path.exists(img1_path):
+        current_mapping = texture_name_mapping_old
+    else:
+        current_mapping = texture_name_mapping
+    
+    for pattern, new_name in current_mapping.items():
+        # Find files matching the pattern
+        matching_files = glob.glob(os.path.join(source_folder, pattern))
+        
+        # Process each matching file
+        for old_path in matching_files:
+            # Extract filename from old_path
+            old_name = os.path.basename(old_path)
+            new_path = os.path.join(source_folder, new_name)
+            
+            # Check if the file exists before attempting to rename
+            if os.path.exists(old_path):
+                # Rename the file
+                os.rename(old_path, new_path)
+                # print(f'Renamed {old_name} to {new_name}')
+            else:
+                print(f'WARNING: File not found - {old_name}')
 
 texture_name_mapping = {
+    '*_01.png': '01-TC_Wrist.png',
+    '*_03.png': '03-TC_QB_Wrist.png',
+    '*_04.png': '04-TC_Thin_Band.png',
+    '*_06.png': '06-TC_Face_Protector.png',
+    '*_07.png': '07-TC_Med_Band--34_sleeve_top.png',
+    '*_10.png': '10-Wt_TC_Pad.png',
+    '*_11.png': '11-TC_Half_Sleeve.png',
+    '*_13.png': '13-Sock.png',
+    '*_14.png': '14-Bk_TC_Pad.png',
+    '*_15.png': '15-TC_Long_Sleeve.png',
+    '*_16.png': '16-Shoe.png',
+    '*_17.png': '17-Shoe_w_White_Tape.png',
+    '*_18.png': '18-Facemask_Far.png',
+    '*_20.png': '20-Facemask_Near.png',
+    '*_22.png': '22-Chinstrap.png',
+    '*_23.png': '23-Shoe_w_Black_Tape.png',
+    '*_24.png': '24-Shoe_w_TC_Tape.png',
+    '*_25.png': '25-TC_Face_Protector_Top.png',
+}
+texture_name_mapping_old = {
     'img1.png': '01-TC_Wrist.png',
     'img3.png': '03-TC_QB_Wrist.png',
     'img4.png': '04-TC_Thin_Band.png',
@@ -241,7 +279,6 @@ texture_name_mapping = {
     'img24.png': '24-Shoe_w_TC_Tape.png',
     'img25.png': '25-TC_Face_Protector_Top.png',
 }
-
 
 # Functions for other configurations and preferences
 def prompt_user(message):
@@ -355,7 +392,7 @@ if csv_provided == False:
 
     # Rename the source files if they were made with photopea
     if photoshop_pref == '2':
-        rename_photopea_files(source_folder, texture_name_mapping)
+        rename_photopea_files(source_folder, texture_name_mapping, texture_name_mapping_old)
 
     # Extract the first segment of uniform_slot_name
     if '-' in uniform_slot_name:
@@ -920,7 +957,7 @@ elif csv_provided == True:
 
     # Rename the source files if they were made with photopea
     if photoshop_pref == '2':
-        rename_photopea_files(source_folder, texture_name_mapping)
+        rename_photopea_files(source_folder, texture_name_mapping, texture_name_mapping_old)
 
     # CHECK FOR MISSING REQUIRED TEXTURES
     required_textures_to_check = [

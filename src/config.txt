@@ -6,33 +6,26 @@
 
 #### Define the full path to the dumps folder.
 #### Be sure to wrap it in double quotes and preced it with an "r" as shown in the example.
-#dumps_path = r"C:\PCSX2\textures\SLUS-21214\dumps"
-dumps_path = r"/Users/j/Library/Application Support/AetherSX2/textures/SLUS-21214/dumps"
+dumps_path = r""
 
 #### The uniform name in the format of in the format of teamname-slotname (Eg. appstate-alt03, appstate-home, etc.)
-#uniform_slot_name = ""
-uniform_slot_name = "tulane-alt18"
+uniform_slot_name = ""
 
 #### Is this a DARK (typically home) uniform or LIGHT uniform? (dark/light)
-#uniform_type = ""
-uniform_type = "light"
+uniform_type = ""
 
 #### Were the TC Gear textures made in Photoshop (1) or Photopea(2)? (1/2)
 #### Photshop file names are 01-TC_Wrist.png, etc. PhotoPea names are img1.png, img3.png, etc. 
-#photoshop_pref = ""
-photoshop_pref = "1"
+photoshop_pref = ""
 
 #### Does this uniform use helmet PRIDE STICKERS? (yes/no)
-#pridesticker_pref = ""
-pridesticker_pref = "no"
+pridesticker_pref = ""
 
 #### Does this uniform use HELMET NUMBERS (any kind, back or side)? (yes/no)
-#helmetnumbers_pref = ""
-helmetnumbers_pref = "no"
+helmetnumbers_pref = ""
 
 #### Does this uniform use SLEEVE/SHOULDER NUMBERS? (yes/no)
-#ssnumbers_pref = ""
-ssnumbers_pref = "no"
+ssnumbers_pref = ""
 
 
 
