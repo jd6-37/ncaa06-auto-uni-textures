@@ -20,6 +20,16 @@ in reference photos. The default white one is in the 'default-textures' folder.
 If you want to use that, copy it into the 'YOUR_TEXTURES_HERE' folder and replace the 
 chinstrap from the TC Gear export. Make sure it is named 'img22.png' or '22-Chinstrap.png'.
 
+Step 2 (only required for users of the LITE or XLITE TC Gear Template).
+Create your shoe textures using the cleats template and overwrite the following files
+with your finished textures. This is not required if you used the FULL version of the
+TC Gear template.
+
+16-Shoe.png
+17-Shoe_w_White_Tape.png
+23-Shoe_w_Black_Tape.png
+24-Shoe_w_TC_Tape.png
+
 STEP 3. Put your other uniform pieces in the same folder. They must be named 
 exactly as follows. The number shadows are automatically made transparent. No need to add those.
 
@@ -38,6 +48,7 @@ num89ss.png†
 
 † optional, and if no source texture is provided, the script can use the main jersey numbers for 
   the helmet and/or sleeve/shoulders (this is usually what you want)
+
 
 
 ##----------- INSTRUCTIONS (For Auto Dumps Image Matching): ----------

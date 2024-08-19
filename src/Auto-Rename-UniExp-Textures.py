@@ -70,7 +70,7 @@ print("#####################################################################")
 print("#                                                                   #")
 print("#       NCAA NEXT Uniform Expansion Texture Renaming Utility        #")
 print("#                                                                   #")
-print("#                     Version: 0.4.3-beta                           #")
+print("#                     Version: 0.5-beta                             #")
 print("#                                                                   #")
 print("#####################################################################")
 
@@ -650,12 +650,20 @@ if csv_provided == False:
                                 os.makedirs(os.path.join(renamed_folder, renamed_subfolder))
                             # Copy a transparent to the 'renamed' folder and rename 
                             new_file_name = f"{found_filename_base}.png"
-                            shutil.copy(os.path.join(default_textures_folder, "transparent.png"), os.path.join(renamed_folder, renamed_subfolder, new_file_name))
-                            print("NUMBER SHADOW TRANSPARENTED")
-                            print(f"{checkmark} SUCCESS. Transparent renamed and filename added to the CSV file.")
-                            required_textures_counter += 1
-                            # Write to the CSV file
-                            csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
+
+                            try:
+                                # Attempt to copy the file
+                                shutil.copy(os.path.join(default_textures_folder, "transparent.png"), os.path.join(renamed_folder, renamed_subfolder, new_file_name))
+                                print("NUMBER SHADOW TRANSPARENTED")
+                                print(f"{checkmark} SUCCESS. Transparent renamed and filename added to the CSV file.")
+                                required_textures_counter += 1
+                                # Write to the CSV file
+                                csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
+                            except FileNotFoundError:
+                                # Handle the FileNotFoundError gracefully
+                                print(f"{Fore.RED}FileNotFoundError: {Style.RESET_ALL}File not found: {os.path.join(source_folder, source_image)}")
+                                print(f"{Fore.RED}Message: {Style.RESET_ALL}The file required for processing is missing.")
+
 
 
                 # If answered yes to transparent pride sticker, copy the transparent image instead of a source image
@@ -733,19 +741,35 @@ if csv_provided == False:
                   # If no helmet or sleeve/shoulder numbers are provided, use the main jersey numbers
                   else:
                       new_file_name = f"{found_filename}.png"
+                      is_success = False
                       if helmetnumbers_pref and numbers_type == "helmet":
-                          shutil.copy(os.path.join(source_folder, numbers_main), os.path.join(renamed_folder, new_file_name))
-                          success_msg = "Texture (used main numbers) renamed and filename added to the CSV file."
-                          optional_textures_counter += 1
+                          try:
+                              shutil.copy(os.path.join(source_folder, numbers_main), os.path.join(renamed_folder, new_file_name))
+                              success_msg = "Texture (used main numbers) renamed and filename added to the CSV file."
+                              optional_textures_counter += 1
+                              is_success = True
+                          except FileNotFoundError:
+                              # Handle the FileNotFoundError gracefully
+                              print(f"{Fore.RED}FileNotFoundError: {Style.RESET_ALL}File not found: {os.path.join(source_folder, source_image)}")
+                              success_msg = f"{Fore.RED}Message: {Style.RESET_ALL}The source file {source_image} is missing."
                       elif ssnumbers_pref and numbers_type == "ss":
-                          shutil.copy(os.path.join(source_folder, numbers_main), os.path.join(renamed_folder, new_file_name))
-                          success_msg = "Texture (used main numbers) renamed and filename added to the CSV file."
-                          optional_textures_counter += 1
+                          try:
+                              shutil.copy(os.path.join(source_folder, numbers_main), os.path.join(renamed_folder, new_file_name))
+                              success_msg = "Texture (used main numbers) renamed and filename added to the CSV file."
+                              optional_textures_counter += 1
+                              is_success = True
+                          except FileNotFoundError:
+                              # Handle the FileNotFoundError gracefully
+                              print(f"{Fore.RED}FileNotFoundError: {Style.RESET_ALL}File not found: {os.path.join(source_folder, source_image)}")
+                              success_msg = f"{Fore.RED}Message: {Style.RESET_ALL}The source file {source_image} is missing."
                       else:
                           success_msg = "Filename added to the CSV file. No texture used."
                       # Write to the CSV file
                       csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
-                      print(f"{checkmark} SUCCESS. {success_msg}")
+                      if is_success:
+                        print(f"{checkmark} SUCCESS. {success_msg}")
+                      else:
+                        print(f"{success_msg}")
 
                 
                 # Everything else
@@ -759,13 +783,18 @@ if csv_provided == False:
                       print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
                       required_textures_counter += 1
                   else:
-                      # Copy from source_folder for other files
-                      new_file_name = f"{found_filename}.png"
-                      shutil.copy(os.path.join(source_folder, source_image), os.path.join(renamed_folder, new_file_name))
-                      # Write to the CSV file
-                      csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
-                      print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
-                      required_textures_counter += 1
+                      try:
+                          # Copy from source_folder for other files
+                          new_file_name = f"{found_filename}.png"
+                          shutil.copy(os.path.join(source_folder, source_image), os.path.join(renamed_folder, new_file_name))
+                          # Write to the CSV file
+                          csv_writer.writerow({'TEAM NAME': teamname, 'SLOT': slotname, 'TYPE': uniform_type, 'TEXTURE': file, 'FILENAME': new_file_name})
+                          print(f"{checkmark} SUCCESS. Texture renamed and filename added to the CSV file.")
+                          required_textures_counter += 1
+                      except FileNotFoundError:
+                          # Handle the FileNotFoundError gracefully
+                          print(f"{Fore.RED}FileNotFoundError: {Style.RESET_ALL}File not found: {os.path.join(source_folder, source_image)}")
+                          print(f"{Fore.RED}Message: {Style.RESET_ALL}The source file {source_image} is missing.")
 
 
             # Check if there are multiple matches for this file only if it's not in the skip list
