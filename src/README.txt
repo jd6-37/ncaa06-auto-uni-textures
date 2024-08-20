@@ -43,12 +43,18 @@ num07helmet.png†
 num89helmet.png†
 num07ss.png† 
 num89ss.png† 
+glove.png^
+glove-second.png^^
 
 * optional, these can be transparented by the tool
 
 † optional, and if no source texture is provided, the script can use the main jersey numbers for 
   the helmet and/or sleeve/shoulders (this is usually what you want)
 
+^ optional, will be skipped if not provided
+
+^^ required only when config setting "second_glove" is "yes". Use the same glove as glove.png,
+   just duplicate the file and rename it to glove-second.png. More instructions below.
 
 
 ##----------- INSTRUCTIONS (For Auto Dumps Image Matching): ----------
@@ -69,7 +75,19 @@ Eg. PCSX2/texture/SLUS-21214/replacements folder to test the uniform.
 
 STEP 4. Test the textures in-game to ensure everything is named properly and working as intended. 
 
-DONE!
+DONE! (almost – now dump the second glove texture...)
+
+*** NEW – GLOVES! ***
+This tool now supports the new gloves mod. In this mod, each uniform uses two 
+glove textures – one for when the home team and one for when the away team. Therefore, you 
+must dump from a second game to get the second glove texture name/replacement. Leave the initial 
+run's folder in RENAMED (the one you just made with the steps above). Then dump from another 
+game (be sure to DELETE DUMPS when the game is loading) where you are the opposite home/visitor 
+team as the firs time. So, if a dark uniform, be the visitor this time. If a light uniform, 
+be the home team this time. Change the "second_glove" setting in config.txt to "yes", and run
+the tool again. It will add another glove subfolder to your uniform's folder and append the
+CSV file with the second glove name.
+
 
 
 ##----------- INSTRUCTIONS (For CSV Input): ----------

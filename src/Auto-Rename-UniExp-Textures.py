@@ -807,6 +807,7 @@ if csv_provided == False:
                         print(f"###########################################################")
                         print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
                         print(f"{Fore.RED}!!! ERROR:{Style.RESET_ALL} No file named glove-second.png exists in YOUR_TEXTURES. Add the source file and try again.")
+                        print(f"{Fore.RED}!!! TIP: This glove should be the same as glove.png, so just duplicate that file and name it glove-second.png.")
                         print(f"{Fore.RED}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!{Style.RESET_ALL}")
                         print(f"###########################################################")
                         # Wait for user to press enter
