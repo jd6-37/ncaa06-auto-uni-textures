@@ -19,6 +19,8 @@ default-textures.zip
 put_exported_textures_in_here.zip
 gather-csv.sh
 check-for-dupes.bat
+config-GITHUB.txt
+config-DEV.txt
 
 ############################################
 # Global across projects system files, etc. 
