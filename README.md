@@ -13,6 +13,8 @@ Mode 2’s Python image recognition feature means we no longer have to hunt for 
 
 Additionally, dumping and Mode 2 only needs to be done once per uniform. After a CSV file is created, the uniform never has to be dumped again. We only need to use the fast Mode 1 CSV renaming in the future. 👀
 
+Screenshot:
+![Screenshot 2024-09-08 at 1 40 45 AM](https://github.com/user-attachments/assets/2d412e31-cddb-4f21-abe8-ddac3b0c3443)
 
 ## Table of Contents
 - [Installation](#installation)
@@ -68,11 +70,6 @@ Closing the window or pressing Ctrl + c will terminate the app.
 ## Using the App <a name="usage"></a>
 
 Open the app and click the "View README" button at the top right of the window to view the documentation.
-
-⚠️ ***This tool is for experienced NCAA NEXT modders.** It requires knowledge of PS2 texture replacement and the workflow for creating uniforms for the NCAA NEXT Uniform Expansion project. The following document is required reading prior to using this tool:*
-
-- [How to Make Uniforms for the NCAA NEXT Mod](https://docs.google.com/document/d/1DC1jlsMENmutn55_Zbo6iYG-3sgPWhNC/edit#heading=h.inb40xudxrzt)
-
 
 <br>
 
