@@ -21,6 +21,7 @@ gather-csv.sh
 check-for-dupes.bat
 config-GITHUB.txt
 config-DEV.txt
+_REVERSE-RENAME-UNIFORM-PARTS.sh
 
 ############################################
 # Global across projects system files, etc. 

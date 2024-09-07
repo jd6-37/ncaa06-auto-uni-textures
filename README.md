@@ -1,19 +1,89 @@
 # NCAA NEXT Texture Renaming Utility
 
-This is the second generation of the batch renaming companion utility for the [NCAA NEXT](https://github.com/ncaanext/ncaa-next-24) Uniform Expansion project. It will automatically find the appropriate textures in your dumps folder by using various Python image processing libraries to compare a set of reference dumped textures to the files in the emulator's dumps folder. After finding the proper files names, it will then batch rename and organize your custom textures, as well as output the textures names to a CSV file.
+This utility is designed to assist in making uniforms for the NCAA NEXT mod's Uniform Expansion project. It significantly reduces the time required to create or update uniforms. It also catalogs the texture names in a CSV file and ensures that uniforms are structured in a standardized format.
 
-Additionally, this utility can batch rename textures using a provided CSV file, bypassing the need for dumping textures again. 
+The utility operates in one of two modes:
 
-## Instructions
+- **Mode 1 (CSV):** Renames your custom uniform textures based on the texture names provided in a CSV file.
+- **Mode 2 (DUMPS):** Automatically searches through the dumps folder to find and rename the correct textures, while also cataloging them in a CSV file.
 
-Download the "NCAANEXT-Auto-Rename-UniExp-Textures.zip" from the [latest release](https://github.com/jd6-37/ncaa06-auto-uni-textures/releases/latest), unzip it, and follow the instructions in the provided [README.txt](https://github.com/jd6-37/ncaa06-auto-uni-textures/blob/main/src/README.txt).
+*Mode 1 is automatically selected if there is a CSV file in the `csv-override` folder. If no CSV file is present, Mode 2 is automatically selected.*
 
-### Video Tutorial
-[https://img.youtube.com/vi/VhjzkMKOtRI/0.jpg](https://img.youtube.com/vi/VhjzkMKOtRI/0.jpg)
+Mode 2’s Python image recognition feature means we no longer have to hunt for textures in the dumps folder and manually catalog texture names. With the renaming functionality of both modes, we never have to rename files by hand! 🎉
 
-[![](https://img.youtube.com/vi/VhjzkMKOtRI/0.jpg)](https://www.youtube.com/watch?v=VhjzkMKOtRI)
+Additionally, dumping and Mode 2 only needs to be done once per uniform. After a CSV file is created, the uniform never has to be dumped again. We only need to use the fast Mode 1 CSV renaming in the future. 👀
 
 
-## Credits
+## Table of Contents
+- [Installation](#installation)
+  - [Option 1: EXE](#installation--exe)
+  - [Option 2: Python Source](#installation--python)
+- [Using the App](#usage)
+- [License](#license)
+- [Credits](#credits)
+
+## Installing the App <a name="installation"></a>
+
+To install and run the app, you have two options:
+
+### Install Option 1: Windows Installer <a name="installation--exe"></a>
+
+Download the setup exe from the latest release and run it. Follow the installation prompts. You can save a shortcut to your desktop or run it from your Start menu like any other Windows application. 
+
+NOTE: You will most likely be warned by Windows Defender about malware for two reasons: 1) the program used to convert the Python app to an EXE is commonly used by hackers, so Windows (as it should) flags these as potential risks, especially because 2) I created the app without a proper developers license (because it costs hundreds of dollars per year). So, if you're not comfortable installing and running the EXE, that's understandable. You can always run the Python source file directly as described in Option 2 below. And feel free to inspect the source code (or ask a programmer you trust to inspect it) beforehand. 
+
+### Install Option 2: Python Source (required for Mac and Linux) <a name="installation--python"></a>
+
+Alternatively, if you have Python installed on your machine, you can run the source py file instead of installing an EXE. If you're on a Mac or Linux machine, this is the only way to run the program.
+
+**STEP 1 – INSTALL PYTHON AND REQUIRED MODULES**
+
+First, check to see if Python is already installed with `python --version`. Also try `python3 --version` if the first one doesn't return a version number. If neither command shows you have Python, you'll need to install it. The easiest way is to go to [python.org](https://www.python.org) and download and install it from there. This project was created in Python Version 3.12.4, so it's best to use that version, if possible. 
+
+Next, you need to install the project's required modules. This is done with the "pip" installer command. All of the project's required modules are listed in the included requirements.txt file. So, to install them all at once, simply open your Terminal or Command Prompt window, navigate to the project directory where the requirements.txt file resides, and run the command: 
+
+    pip install -r requirements.txt
+
+If you get an error, try:
+
+    pip3 install -r requirements.txt
+
+
+**STEP 2 – RUN THE PY FILE**
+
+With python and all of the required modules installed, you can now start the app with:
+
+    python Auto-Rename-Textures.py
+
+or if that doesn't work, try... 
+
+    python3 Auto-Rename-Textures.py
+
+The app should open in a new window and from here it will work just the same as running the EXE.
+
+Closing the window or pressing Ctrl + c will terminate the app.
+
+<br>
+
+## Using the App <a name="usage"></a>
+
+Open the app and click the "View README" button at the top right of the window to view the documentation.
+
+⚠️ ***This tool is for experienced NCAA NEXT modders.** It requires knowledge of PS2 texture replacement and the workflow for creating uniforms for the NCAA NEXT Uniform Expansion project. The following document is required reading prior to using this tool:*
+
+- [How to Make Uniforms for the NCAA NEXT Mod](https://docs.google.com/document/d/1DC1jlsMENmutn55_Zbo6iYG-3sgPWhNC/edit#heading=h.inb40xudxrzt)
+
+
+<br>
+
+## LICENSE & PERMISSIONS <a name="license"></a>
+
+NCAA NEXT Texture Renaming Utility © 2024 is licensed under [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1) 
+
+This license requires that reusers give credit to the creator. It allows reusers to distribute, remix, adapt, and build upon the material in any medium or format, for noncommercial purposes only.
+
+<br>
+
+## Credits <a name="credits"></a>
 
 This is an NCAA NEXT mod team project. The idea was conceived and POCed by @H4wduk3n, and the development of the project is a collaboration between @H4wduk3n, @JD637, and @jozur – along with the help of others in the NCAA NEXT team and community.
